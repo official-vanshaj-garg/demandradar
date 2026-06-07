@@ -43,3 +43,13 @@ AI/classify() must never return or overwrite:
 - location_text
 - latitude
 - longitude
+
+## Decision 007 — Keep Bun as package manager
+
+We will keep Bun as the package manager for now.
+
+Reason:
+- The Lovable-generated project already included bun.lock.
+- Installing Bun is a smaller change than migrating to npm.
+- The local dev server works with bun run dev.
+- Avoiding package-manager migration keeps Layer 1 focused and reduces unnecessary risk before de-Lovable extraction.
