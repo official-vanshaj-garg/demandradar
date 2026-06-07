@@ -7,7 +7,7 @@ import { ACTOR_LABEL, CATEGORY_META } from "@/lib/ai/types";
 import { BLR_ZONES, projectToCanvas, resolveLocation } from "@/lib/geo/bengaluru";
 import { addDemand, getSessionId } from "@/lib/data/store";
 import { ConfidenceBar, ImpactPriorityTag, SignalStrengthMeter, UrgencyChip } from "@/components/demand/Indicators";
-import { GemmaBadge } from "@/components/layout/GemmaBadge";
+import { AIBadge } from "@/components/layout/AIBadge";
 
 export const Route = createFileRoute("/report")({
   head: () => ({
@@ -122,7 +122,7 @@ function ReportPage() {
           <h1 className="mt-1 font-display text-3xl font-semibold sm:text-4xl">Tell DemandRadar what's missing</h1>
           <p className="mt-1 text-sm text-muted-foreground">Anonymous · privacy-safe · no login.</p>
         </div>
-        <GemmaBadge />
+        <AIBadge />
       </div>
 
       <div className="mb-6 flex items-center gap-3">

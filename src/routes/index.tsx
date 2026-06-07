@@ -2,14 +2,14 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, Radar, Activity, MapPin, Sparkles, ShieldCheck, GraduationCap, Building2, Users, Landmark, Lightbulb, Briefcase } from "lucide-react";
 import { RadarHero } from "@/components/radar/RadarHero";
 import { LiveSignalFeed } from "@/components/feed/LiveSignalFeed";
-import { GemmaBadge } from "@/components/layout/GemmaBadge";
+import { AIBadge } from "@/components/layout/AIBadge";
 import { CATEGORY_META } from "@/lib/ai/types";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
       { title: "DemandRadar — Reveal what your community needs" },
-      { name: "description", content: "DemandRadar turns scattered local complaints into structured Demand Cards. Pilot live in Bengaluru. AI signal engine ready." },
+      { name: "description", content: "DemandRadar turns scattered local gaps into structured Demand Cards. Pilot live in Bengaluru. AI signal engine ready." },
       { property: "og:title", content: "DemandRadar — Hyperlocal Demand Intelligence" },
       { property: "og:description", content: "Building the demand graph for hyperlocal India." },
     ],
@@ -24,14 +24,14 @@ function Landing() {
       <section className="relative overflow-hidden">
         <div className="mx-auto grid max-w-7xl items-center gap-10 px-4 py-14 sm:px-6 md:py-24 lg:grid-cols-[1.1fr_1fr]">
           <div className="min-w-0">
-            <GemmaBadge />
+            <AIBadge />
             <h1 className="mt-5 font-display font-semibold leading-[1.05] tracking-tight" style={{ fontSize: "clamp(2rem, 7vw, 3.75rem)" }}>
               Reveal what your community
               <br className="hidden sm:inline" />{" "}
               <span className="text-gradient">needs before anyone</span> sees it.
             </h1>
             <p className="mt-5 max-w-xl text-base text-muted-foreground sm:text-lg">
-              DemandRadar turns scattered complaints, group chats and local frustrations into
+              DemandRadar turns scattered demand signals, group chats and local frustrations into
               <span className="text-foreground"> structured Demand Cards</span> — geo-tagged,
               privacy-safe, and ranked by signal strength.
             </p>
@@ -104,7 +104,7 @@ function Landing() {
 
       {/* BEFORE / AFTER */}
       <section className="mx-auto mt-20 max-w-7xl px-4 sm:px-6">
-        <SectionHeading kicker="Before vs After" title="Scattered complaints → Structured demand intelligence" />
+        <SectionHeading kicker="Before vs After" title="Scattered signals → Structured demand intelligence" />
         <div className="mt-8 grid gap-6 md:grid-cols-2">
           <div className="rounded-2xl border border-border bg-surface/40 p-5">
             <div className="font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">Before</div>

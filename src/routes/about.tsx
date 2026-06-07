@@ -1,11 +1,11 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+﻿import { createFileRoute, Link } from "@tanstack/react-router";
 import { ShieldCheck, Sparkles, Radar, Map, ArrowRight } from "lucide-react";
 
 export const Route = createFileRoute("/about")({
   head: () => ({
     meta: [
-      { title: "About · DemandRadar" },
-      { name: "description", content: "DemandRadar isn't a complaint app. It's a demand intelligence layer for hyperlocal India, starting with Bengaluru." },
+      { title: "About Â· DemandRadar" },
+      { name: "description", content: "DemandRadar is a demand intelligence layer for hyperlocal India, starting with Bengaluru." },
     ],
   }),
   component: About,
@@ -19,15 +19,15 @@ function About() {
         We're building the <span className="text-gradient">demand graph</span> for hyperlocal India.
       </h1>
       <p className="mt-4 text-lg text-muted-foreground">
-        DemandRadar turns scattered local frustrations into structured, privacy-safe Demand Cards — and surfaces them on a map and dashboard so the right actors can respond before the gap turns into a crisis.
+        DemandRadar turns scattered local frustrations into structured, privacy-safe Demand Cards â€” and surfaces them on a map and dashboard so the right actors can respond before the gap turns into a crisis.
       </p>
 
       <Section title="What DemandRadar is" icon={Radar}>
-        <p>An intelligence layer between residents and the people who can act — local businesses, civic bodies, NGOs, and entrepreneurs. Every signal becomes a typed Demand Card with category, urgency, signal strength, confidence, and a recommended actor.</p>
+        <p>An intelligence layer between residents and the people who can act â€” local businesses, civic bodies, NGOs, and entrepreneurs. Every signal becomes a typed Demand Card with category, urgency, signal strength, confidence, and a recommended actor.</p>
       </Section>
 
-      <Section title="Why this is not a complaint app" icon={Sparkles}>
-        <p>Complaint apps collect grievances and ship them into a void. DemandRadar does the opposite: it converts grievances into <span className="text-foreground">demand intelligence</span> — ranked, geo-tagged, clustered, and routed. Operators see opportunity. Civic bodies see priority. Residents see action.</p>
+      <Section title="Why this is demand intelligence" icon={Sparkles}>
+        <p>Traditional local feedback stays scattered and hard to act on. DemandRadar does the opposite: it converts unmet needs into <span className="text-foreground">demand intelligence</span> â€” ranked, geo-tagged, clustered, and routed. Operators see opportunity. Civic bodies see priority. Residents see action.</p>
       </Section>
 
       <Section title="How it works" icon={Map}>
@@ -41,7 +41,7 @@ function About() {
 
       <Section title="Privacy-first design" icon={ShieldCheck}>
         <ul className="list-disc space-y-1 pl-5 text-muted-foreground">
-          <li>Anonymous reporting — only an opaque session id is stored locally.</li>
+          <li>Anonymous reporting â€” only an opaque session id is stored locally.</li>
           <li>Coordinates rounded to ~110m before storage.</li>
           <li>Phone numbers, emails and long ID-like numbers are auto-redacted from raw text.</li>
           <li>No tracking pixels, no third-party analytics in the MVP.</li>
@@ -49,11 +49,11 @@ function About() {
       </Section>
 
       <Section title="Model-ready AI architecture" icon={Sparkles}>
-        <p>Today, the intelligence layer runs a deterministic demo classifier so the experience is fast and reproducible. The contract — <span className="font-mono text-primary">classify(input) → ClassifyOutput</span> — is the only swap point. When a production model is wired into the adapter, the UI, schema, dashboard, and map don't move. Future model integration will run server-side and stream sharper categorisation, urgency calibration, and cluster naming.</p>
+        <p>Today, the intelligence layer runs a deterministic demo classifier so the experience is fast and reproducible. The contract â€” <span className="font-mono text-primary">classify(input) â†’ ClassifyOutput</span> â€” is the only swap point. When a production model is wired into the adapter, the UI, schema, dashboard, and map don't move. Future model integration will run server-side and stream sharper categorisation, urgency calibration, and cluster naming.</p>
       </Section>
 
       <Section title="Future startup vision" icon={Radar}>
-        <p>Bengaluru is the pilot. Next: every campus town, every Tier-1 ward, every Tier-2 neighborhood. Long-term, DemandRadar becomes the API for hyperlocal demand — used by quick-commerce, transit planners, micro-entrepreneurs, and civic-tech operators to allocate resources where residents are actively asking for them.</p>
+        <p>Bengaluru is the pilot. Next: every campus town, every Tier-1 ward, every Tier-2 neighborhood. Long-term, DemandRadar becomes the API for hyperlocal demand â€” used by quick-commerce, transit planners, micro-entrepreneurs, and civic-tech operators to allocate resources where residents are actively asking for them.</p>
       </Section>
 
       <div className="mt-12 rounded-2xl border border-primary/30 bg-primary/[0.05] p-6">
@@ -83,3 +83,4 @@ function Section({ title, icon: Icon, children }: { title: string; icon: any; ch
     </section>
   );
 }
+

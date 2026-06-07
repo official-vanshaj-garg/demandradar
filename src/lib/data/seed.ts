@@ -49,7 +49,7 @@ const RAW: Array<{ raw: string; zone: string; loc?: string; status?: "new" | "re
 ];
 
 let counter = 0;
-function fakeId(seed: string) {
+function generateLocalId(seed: string) {
   counter++;
   let h = 0;
   for (let i = 0; i < seed.length; i++) h = (h * 31 + seed.charCodeAt(i)) >>> 0;
@@ -77,7 +77,7 @@ export function buildSeedDemands(): DemandReport[] {
     const daysAgo = row.daysAgo ?? Math.floor((i % 9) + 1);
     const created = new Date(Date.now() - daysAgo * 86400_000 - i * 3600_000).toISOString();
     return {
-      id: fakeId(row.raw),
+      id: generateLocalId(row.raw),
       created_at: created,
       reporter_session: `seed-${i}`,
       raw_text: row.raw,

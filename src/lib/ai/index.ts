@@ -2,8 +2,8 @@
 // All AI-derived fields flow through this single function.
 //
 // This is the single swap point ("model adapter") for any future provider.
-// TODO: Replace mock classifier with a real model provider (e.g. Gemma 4 for
-//       hackathon/demo builds, or any hosted LLM in production). Keep the
+// TODO: Replace mock classifier with a real model provider (e.g. remote model for
+//       demo builds, or any hosted LLM in production). Keep the
 //       ClassifyInput/ClassifyOutput contract intact so UI + DB don't change.
 
 import { mockClassify } from "./mockClassifier";

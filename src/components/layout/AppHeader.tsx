@@ -1,7 +1,7 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import { Radar, Menu, X } from "lucide-react";
 import { useState } from "react";
-import { GemmaBadge } from "./GemmaBadge";
+import { AIBadge } from "./AIBadge";
 
 const NAV = [
   { to: "/", label: "Home" },
@@ -51,7 +51,7 @@ export function AppHeader() {
         </nav>
 
         <div className="ml-auto hidden items-center gap-3 md:flex">
-          <GemmaBadge compact />
+          <AIBadge compact />
           <Link
             to="/report"
             className="inline-flex items-center justify-center rounded-md bg-gradient-to-r from-secondary to-primary px-4 py-2 text-sm font-medium text-primary-foreground glow-teal transition hover:brightness-110"
@@ -71,7 +71,7 @@ export function AppHeader() {
 
       {open && (
         <div className="border-t border-border bg-background/90 px-4 py-3 md:hidden">
-          <div className="mb-3"><GemmaBadge compact /></div>
+          <div className="mb-3"><AIBadge compact /></div>
           <div className="grid gap-1">
             {NAV.map((n) => (
               <Link

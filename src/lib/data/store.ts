@@ -1,5 +1,5 @@
 // Local-first demand store. Persists user-submitted reports to localStorage and merges with seed.
-// (When Lovable Cloud is wired up later, swap the read/write impls here behind the same hooks.)
+// (When a production database is wired up later, swap the read/write impls here behind the same hooks.)
 
 import { useEffect, useState, useCallback } from "react";
 import type { DemandReport } from "../ai/types";

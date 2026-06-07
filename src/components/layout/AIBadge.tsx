@@ -1,12 +1,11 @@
 // AI Signal Engine badge.
-// Filename retained for git history; the visible product surface is now
-// model-agnostic. The underlying adapter (`lib/ai/index.ts → classify()`) is
-// the single swap point — a real provider such as Gemma 4 can be plugged in
-// for hackathon/demo builds without touching this component.
+// The visible product surface is now model-agnostic. The underlying adapter (`lib/ai/index.ts → classify()`) is
+// the single swap point — a real remote provider can be plugged in
+// for demo builds without touching this component.
 import { Sparkles } from "lucide-react";
 import { AI_MODE } from "@/lib/ai";
 
-export function GemmaBadge({ compact = false }: { compact?: boolean }) {
+export function AIBadge({ compact = false }: { compact?: boolean }) {
   return (
     <div className="inline-flex items-center gap-2 rounded-full border border-border-strong bg-glass px-3 py-1 text-xs glass">
       <span className="relative flex h-2 w-2">

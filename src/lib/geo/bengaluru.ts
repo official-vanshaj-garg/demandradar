@@ -51,7 +51,7 @@ export function roundCoord(n: number) { return Math.round(n * 1000) / 1000; }
 // Location source-of-truth resolver.
 //
 // DemandRadar rule: the user-selected/entered area is authoritative. The AI
-// classifier (mock today, Gemma 4 later) MUST NEVER override location fields.
+// classifier (mock today, AI Signal Engine later) MUST NEVER override location fields.
 // This helper normalizes whatever the report form gives us into a consistent
 // { area_label, location_text, latitude, longitude } tuple used everywhere
 // downstream (Dashboard, Map, Insights all read these stored fields directly).

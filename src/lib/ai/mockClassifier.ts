@@ -1,5 +1,5 @@
 // DemandRadar — Demo classifier (deterministic, in-process).
-// TODO: Replace with a real model provider such as Gemma 4 for hackathon/demo
+// TODO: Replace with a real model provider for demo
 // builds, or a hosted LLM in production. Keep `mockClassify`'s ClassifyInput/
 // ClassifyOutput signature so a real provider can be dropped in behind
 // `lib/ai/index.ts → classify()` with no UI/DB changes.
