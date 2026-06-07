@@ -2,7 +2,7 @@
 // All AI-derived fields produced via the same `mockClassify` contract used at runtime.
 
 import { mockClassify } from "../ai/mockClassifier";
-import type { DemandReport } from "../ai/types";
+import type { DemandReport } from "@/domain/demand";
 import { BLR_ZONES, roundCoord } from "../geo/bengaluru";
 
 const RAW: Array<{ raw: string; zone: string; loc?: string; status?: "new" | "reviewing" | "acknowledged"; upvotes?: number; daysAgo?: number }> = [

@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo } from "react";
 import { useDemands } from "@/lib/data/store";
-import { ACTOR_LABEL, CATEGORY_META, PRIORITY_RANK, type DemandReport } from "@/lib/ai/types";
+import { ACTOR_LABEL, CATEGORY_META, PRIORITY_RANK, type DemandReport } from "@/domain/demand";
 import { BLR_ZONES } from "@/lib/geo/bengaluru";
 import { Lightbulb, Target, Users, Sparkles, ArrowRight } from "lucide-react";
 

@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { useDemands } from "@/lib/data/store";
-import { CATEGORY_META, type DemandCategory, type DemandReport } from "@/lib/ai/types";
+import { CATEGORY_META, type DemandCategory, type DemandReport } from "@/domain/demand";
 import { DemandRadarMap } from "@/components/map/DemandRadarMap";
 import { DemandCardDrawer } from "@/components/demand/DemandCardDrawer";
 import { Filter } from "lucide-react";

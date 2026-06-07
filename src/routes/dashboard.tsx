@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { useDemands, toggleUpvote } from "@/lib/data/store";
-import { CATEGORY_META, PRIORITY_RANK, type DemandCategory, type DemandReport } from "@/lib/ai/types";
+import { CATEGORY_META, PRIORITY_RANK, type DemandCategory, type DemandReport } from "@/domain/demand";
 import { BLR_ZONES } from "@/lib/geo/bengaluru";
 import { DemandCard } from "@/components/demand/DemandCard";
 import { DemandCardDrawer } from "@/components/demand/DemandCardDrawer";

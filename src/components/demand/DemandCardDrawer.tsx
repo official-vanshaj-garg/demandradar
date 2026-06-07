@@ -1,5 +1,5 @@
-import type { DemandReport } from "@/lib/ai/types";
-import { ACTOR_LABEL, CATEGORY_META } from "@/lib/ai/types";
+import type { DemandReport } from "@/domain/demand";
+import { ACTOR_LABEL, CATEGORY_META } from "@/domain/demand";
 import { X, MapPin, Users, ShieldCheck, Lightbulb, Activity, Hash } from "lucide-react";
 import { ConfidenceBar, ImpactPriorityTag, SignalStrengthMeter, UrgencyChip } from "./Indicators";
 

@@ -1,5 +1,5 @@
-import type { DemandReport } from "@/lib/ai/types";
-import { CATEGORY_META } from "@/lib/ai/types";
+import type { DemandReport } from "@/domain/demand";
+import { CATEGORY_META } from "@/domain/demand";
 import { ConfidenceBar, ImpactPriorityTag, SignalStrengthMeter, UrgencyChip } from "./Indicators";
 import { ArrowUpRight, MapPin, Users, ThumbsUp } from "lucide-react";
 

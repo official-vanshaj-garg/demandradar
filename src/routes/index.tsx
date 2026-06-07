@@ -3,7 +3,7 @@ import { ArrowRight, Radar, Activity, MapPin, Sparkles, ShieldCheck, GraduationC
 import { RadarHero } from "@/components/radar/RadarHero";
 import { LiveSignalFeed } from "@/components/feed/LiveSignalFeed";
 import { AIBadge } from "@/components/layout/AIBadge";
-import { CATEGORY_META } from "@/lib/ai/types";
+import { CATEGORY_META } from "@/domain/demand";
 
 export const Route = createFileRoute("/")({
   head: () => ({

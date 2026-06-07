@@ -11,7 +11,7 @@ import type {
   DemandCategory,
   ImpactPriority,
   RecommendedActor,
-} from "./types";
+} from "@/domain/demand";
 
 const KEYWORDS: Array<{ cat: DemandCategory; sub: string; words: string[] }> = [
   { cat: "study_space", sub: "24h study library", words: ["study", "library", "quiet", "exam", "wifi", "coworking"] },

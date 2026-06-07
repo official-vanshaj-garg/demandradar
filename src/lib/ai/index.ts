@@ -7,9 +7,9 @@
 //       ClassifyInput/ClassifyOutput contract intact so UI + DB don't change.
 
 import { mockClassify } from "./mockClassifier";
-import type { ClassifyInput, ClassifyOutput } from "./types";
+import type { ClassifyInput, ClassifyOutput } from "@/domain/demand";
 
-export type { ClassifyInput, ClassifyOutput } from "./types";
+export type { ClassifyInput, ClassifyOutput } from "@/domain/demand";
 
 export const AI_MODE: "mock" | "remote" = "mock";
 

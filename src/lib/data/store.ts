@@ -2,7 +2,7 @@
 // (When a production database is wired up later, swap the read/write impls here behind the same hooks.)
 
 import { useEffect, useState, useCallback } from "react";
-import type { DemandReport } from "../ai/types";
+import type { DemandReport } from "@/domain/demand";
 import { SEED_DEMANDS } from "./seed";
 
 const STORAGE_KEY = "demandradar.user_reports.v1";

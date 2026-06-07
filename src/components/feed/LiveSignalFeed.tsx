@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
-import type { DemandReport } from "@/lib/ai/types";
-import { CATEGORY_META } from "@/lib/ai/types";
+import type { DemandReport } from "@/domain/demand";
+import { CATEGORY_META } from "@/domain/demand";
 import { useDemands } from "@/lib/data/store";
 
 export function LiveSignalFeed({ limit = 6 }: { limit?: number }) {

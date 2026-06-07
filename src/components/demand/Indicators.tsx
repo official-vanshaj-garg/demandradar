@@ -1,4 +1,4 @@
-import type { ImpactPriority } from "@/lib/ai/types";
+import type { ImpactPriority } from "@/domain/demand";
 
 export function SignalStrengthMeter({ value, size = 64 }: { value: number; size?: number }) {
   const v = Math.max(0, Math.min(100, value));

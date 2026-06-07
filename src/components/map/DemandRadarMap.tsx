@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
-import type { DemandReport } from "@/lib/ai/types";
-import { CATEGORY_META, type DemandCategory } from "@/lib/ai/types";
+import type { DemandReport } from "@/domain/demand";
+import { CATEGORY_META, type DemandCategory } from "@/domain/demand";
 import { BLR_ZONES, projectToCanvas } from "@/lib/geo/bengaluru";
 
 interface Props {
