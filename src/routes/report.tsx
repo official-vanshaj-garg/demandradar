@@ -70,10 +70,7 @@ function ReportPage() {
     try {
       const out = await classify({
         raw_text: text,
-        area_label: zone.label,
-        location_text: locText || zone.label,
-        latitude: zone.lat,
-        longitude: zone.lng,
+        location_context: { area_label: locText || zone.label },
       });
       setCard(out);
       setStep(3);

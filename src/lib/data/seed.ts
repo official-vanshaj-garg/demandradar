@@ -69,10 +69,7 @@ export function buildSeedDemands(): DemandReport[] {
     const lng = roundCoord(jitter(zone.lng, 0.012, i + 7));
     const ai = mockClassify({
       raw_text: row.raw,
-      area_label: zone.label,
-      location_text: row.loc,
-      latitude: lat,
-      longitude: lng,
+      location_context: { area_label: zone.label },
     });
     const daysAgo = row.daysAgo ?? Math.floor((i % 9) + 1);
     const created = new Date(Date.now() - daysAgo * 86400_000 - i * 3600_000).toISOString();

@@ -39,10 +39,11 @@ export type DemandStatus = "new" | "reviewing" | "acknowledged";
 
 export interface ClassifyInput {
   raw_text: string;
-  location_text?: string;
-  area_label?: string;
-  latitude?: number;
-  longitude?: number;
+  location_context?: {
+    area_label?: string;
+    city?: string;
+    micro_area?: string;
+  };
 }
 
 export interface ClassifyOutput {
@@ -103,3 +104,118 @@ export const ACTOR_LABEL: Record<RecommendedActor, string> = {
 export const PRIORITY_RANK: Record<ImpactPriority, number> = {
   low: 1, medium: 2, high: 3, critical: 4,
 };
+
+// --- LAYER 2: NEW DOMAIN SCHEMA ---
+
+export type SubmissionInputMethod = "text" | "voice" | "whatsapp_forward";
+export type LocationSource = "browser_gps" | "manual_area" | "manual_pin" | "typed_address" | "mappls_geocode" | "mappls_reverse_geocode" | "internal_bengaluru_zone" | "unknown";
+export type LocationProvider = "internal" | "browser" | "mappls" | "google_maps" | "none";
+export type LocationPrecision = "exact" | "approximate" | "micro_area" | "area_level" | "city_level" | "unknown";
+
+export interface ResolvedLocation {
+  latitude: number | null;
+  longitude: number | null;
+  location_text: string;
+  area_label: string;
+  micro_area?: string;
+  landmark_text?: string;
+  pincode?: string;
+  city: string;
+  region?: string;
+  country: string;
+  source: LocationSource;
+  provider: LocationProvider;
+  precision: LocationPrecision;
+  accuracy_meters?: number;
+  user_confirmed: boolean;
+  captured_at: string;
+  is_sensitive_location?: boolean;
+  privacy_fuzz_meters?: number;
+}
+
+export type SubmissionIntentType = "new_demand" | "support_existing_demand" | "evidence_addition" | "service_search_query" | "feedback_about_app" | "spam_or_irrelevant" | "safety_or_emergency";
+export type DemandNature = "missing_service" | "poor_quality" | "overpriced" | "inaccessible" | "capacity_gap" | "timing_gap" | "safety_gap";
+export type EffortSignal = "wish" | "searched" | "tried_failed" | "workaround";
+export type DemandRecurrence = "daily" | "weekly" | "rare" | "one_time";
+export type TimeOfDay = "morning" | "afternoon" | "evening" | "night" | "any";
+export type DemandSeasonality = "monsoon" | "summer" | "winter" | "all_year";
+
+export interface DemandIntentClassification {
+  intent_type: SubmissionIntentType;
+  nature: DemandNature;
+  category: DemandCategory;
+  sub_category: string;
+  urgency: number;
+  affected_group: AffectedGroup;
+  recommended_actor: RecommendedActor;
+  recurrence?: DemandRecurrence;
+  time_of_day?: TimeOfDay;
+  seasonality?: DemandSeasonality;
+  effort_signal?: EffortSignal;
+  effort_narrative?: string;
+  confidence_score?: number;
+  tags?: string[];
+}
+
+export interface DemandEvidence {
+  id: string;
+  type: "photo" | "screenshot" | "link" | "voice_note" | "text_note" | "document";
+  local_preview_url?: string;
+  storage_url?: string;
+  external_url?: string;
+  caption?: string;
+  transcript?: string;
+  ocr_text?: string;
+  is_sensitive?: boolean;
+  status: "local_only" | "pending_upload" | "uploaded" | "flagged";
+}
+
+export interface DemandQualityFlag {
+  flag_type: "spam" | "profanity" | "vague" | "duplicate";
+  severity: "low" | "high";
+  reason: string;
+}
+
+export interface InterestSignal {
+  session_id: string;
+  type: "co_sign" | "would_use" | "would_pay";
+  willingness_to_pay_inr?: number;
+  expected_frequency?: "daily" | "weekly" | "monthly" | "occasionally";
+  created_at: string;
+}
+
+export interface DemandSubmission {
+  id: string;
+  created_at: string;
+  reporter_session: string;
+  input_method: SubmissionInputMethod;
+  raw_text: string;
+  location: ResolvedLocation;
+  evidence: DemandEvidence[];
+}
+
+export interface DemandCard {
+  id: string;
+  submission_id: string;
+  created_at: string;
+  updated_at: string;
+  title: string;
+  need_summary: string;
+  status: DemandStatus;
+  
+  submission: DemandSubmission;
+  location: ResolvedLocation;
+  classification: DemandIntentClassification;
+  evidence: DemandEvidence[];
+  interest_signals?: InterestSignal[];
+  quality_flags: DemandQualityFlag[];
+  
+  co_sign_count: number;
+  similar_reports_count: number;
+  
+  signal_strength: number;
+  impact_priority: ImpactPriority;
+  privacy_status: PrivacyStatus;
+  confidence_score: number;
+  suggested_action: string;
+}

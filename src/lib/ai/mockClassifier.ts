@@ -146,12 +146,12 @@ export function mockClassify(input: ClassifyInput): ClassifyOutput {
 
   const lengthBoost = Math.min(20, Math.floor(clean.length / 20));
   const keywordBoost = Math.min(25, score * 8);
-  const noiseSeed = h(clean + (input.area_label || ""));
+  const noiseSeed = h(clean + (input.location_context?.area_label || ""));
   const signal = Math.max(35, Math.min(95, 50 + lengthBoost + keywordBoost + Math.floor(noiseSeed * 15)));
   const confidence = Math.max(55, Math.min(96, 70 + keywordBoost + Math.floor(noiseSeed * 10) - (cat === "other" ? 15 : 0)));
   const similar = Math.max(1, Math.min(28, Math.floor(2 + noiseSeed * 18 + (signal - 50) / 6)));
 
-  const area = input.area_label;
+  const area = input.location_context?.area_label;
   return {
     clean_text: clean,
     title: makeTitle(cat, sub, area),
