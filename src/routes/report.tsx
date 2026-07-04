@@ -4,7 +4,8 @@ import { ArrowLeft, ArrowRight, Loader2, MapPin, Sparkles, Check } from "lucide-
 import { classify } from "@/lib/ai";
 import type { ClassifyOutput, DemandReport } from "@/domain/demand";
 import { ACTOR_LABEL, CATEGORY_META } from "@/domain/demand";
-import { BLR_ZONES, projectToCanvas, resolveLocation } from "@/lib/geo/bengaluru";
+import { BLR_ZONES, projectToCanvas } from "@/lib/geo/bengaluru";
+import { resolveLocation } from "@/lib/location";
 import { addDemand, getSessionId } from "@/lib/data/store";
 import { ConfidenceBar, ImpactPriorityTag, SignalStrengthMeter, UrgencyChip } from "@/components/demand/Indicators";
 import { AIBadge } from "@/components/layout/AIBadge";
