@@ -11,6 +11,13 @@ export const internalBengaluruProvider: LocationProviderAdapter = {
       (input.zone_key ? zoneByKey(input.zone_key) : undefined) ??
       (input.area_label ? zoneByLabel(input.area_label) : undefined);
 
+    const acc =
+      typeof input.accuracy_meters === "number" &&
+      Number.isFinite(input.accuracy_meters) &&
+      input.accuracy_meters > 0
+        ? input.accuracy_meters
+        : undefined;
+
     if (zone) {
       const lat = typeof input.latitude === "number" ? input.latitude : zone.lat;
       const lng = typeof input.longitude === "number" ? input.longitude : zone.lng;
@@ -24,6 +31,7 @@ export const internalBengaluruProvider: LocationProviderAdapter = {
         source: "internal_bengaluru_zone",
         provider: "internal",
         precision: "area_level",
+        accuracy_meters: acc,
         user_confirmed: true,
         captured_at: new Date().toISOString(),
       };
@@ -41,6 +49,7 @@ export const internalBengaluruProvider: LocationProviderAdapter = {
       source: input.location_text ? "typed_address" : "unknown",
       provider: "internal",
       precision: input.location_text ? "area_level" : "unknown",
+      accuracy_meters: acc,
       user_confirmed: true,
       captured_at: new Date().toISOString(),
     };

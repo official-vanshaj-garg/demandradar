@@ -6,6 +6,7 @@ export interface LocationResolveInput {
   location_text?: string | null;
   latitude?: number | null;
   longitude?: number | null;
+  accuracy_meters?: number | null;
 }
 
 export interface LocationProviderAdapter {
