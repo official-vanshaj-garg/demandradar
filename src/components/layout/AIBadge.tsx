@@ -18,7 +18,8 @@ export function AIBadge({ compact = false }: { compact?: boolean }) {
       </span>
       {!compact && (
         <span className="text-muted-foreground">
-          • running in <span className="text-primary">{AI_MODE === "mock" ? "demo" : AI_MODE}</span> mode
+          • running in <span className="text-primary">{AI_MODE === "mock" ? "demo" : AI_MODE}</span>{" "}
+          mode
         </span>
       )}
     </div>

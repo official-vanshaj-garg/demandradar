@@ -49,14 +49,14 @@ docs/                      This handoff + integration plan + test checklist
 
 ## 3. Main routes / pages
 
-| Route        | Purpose |
-|--------------|---------|
+| Route        | Purpose                                                      |
+| ------------ | ------------------------------------------------------------ |
 | `/`          | Landing — radar hero, problem, live feed, before/after, CTAs |
-| `/report`    | 4-step wizard: Describe → Locate → Preview → Submit |
-| `/dashboard` | KPIs, area×category matrix, leaderboards, live feed |
-| `/map`       | Custom SVG radar map of all signals |
-| `/insights`  | Auto-clusters and opportunity scorecards |
-| `/about`     | Product thesis, privacy, model-ready architecture |
+| `/report`    | 4-step wizard: Describe → Locate → Preview → Submit          |
+| `/dashboard` | KPIs, area×category matrix, leaderboards, live feed          |
+| `/map`       | Custom SVG radar map of all signals                          |
+| `/insights`  | Auto-clusters and opportunity scorecards                     |
+| `/about`     | Product thesis, privacy, model-ready architecture            |
 
 ## 4. Data flow
 

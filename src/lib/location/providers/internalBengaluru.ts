@@ -53,5 +53,5 @@ export const internalBengaluruProvider: LocationProviderAdapter = {
       user_confirmed: true,
       captured_at: new Date().toISOString(),
     };
-  }
+  },
 };

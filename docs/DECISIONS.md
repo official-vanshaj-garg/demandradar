@@ -16,6 +16,7 @@ Google Maps shows what exists. DemandRadar reveals what is missing.
 We will complete one layer properly before starting the next.
 
 Current plan:
+
 - Layer 0: Product lock
 - Layer 1: UI shell audit and cleanup
 - Layer 2: DemandRadar domain model
@@ -39,6 +40,7 @@ Layer 1 is only for frontend shell cleanup and repo hygiene.
 Location fields must be controlled by app-owned location logic such as resolveLocation().
 
 AI/classify() must never return or overwrite:
+
 - area_label
 - location_text
 - latitude
@@ -49,6 +51,7 @@ AI/classify() must never return or overwrite:
 We will keep Bun as the package manager for now.
 
 Reason:
+
 - The Lovable-generated project already included bun.lock.
 - Installing Bun is a smaller change than migrating to npm.
 - The local dev server works with bun run dev.

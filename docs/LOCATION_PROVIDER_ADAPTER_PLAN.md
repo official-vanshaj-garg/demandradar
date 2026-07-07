@@ -1,7 +1,9 @@
 # Layer 2C: Location Provider Adapter Foundation
 
 ## Strategy
+
 Refactor `src/lib/location` to use an adapter pattern to prepare for Mappls/Google Maps integration.
+
 - **`LocationProviderAdapter`**: Standard interface that all providers must conform to.
 - **`internalBengaluruProvider`**: Implements the legacy pilot logic as the default internal adapter.
 - **`resolveLocation`**: A thin delegator that passes input to the active adapter.

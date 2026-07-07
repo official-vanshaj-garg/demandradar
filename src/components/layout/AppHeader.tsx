@@ -25,8 +25,12 @@ export function AppHeader() {
             <span className="absolute -right-0.5 -top-0.5 h-2 w-2 rounded-full bg-primary anim-signal-blink" />
           </div>
           <div className="min-w-0 leading-tight">
-            <div className="truncate font-display text-base font-semibold tracking-tight">DemandRadar</div>
-            <div className="hidden truncate font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground sm:block">Hyperlocal Intel</div>
+            <div className="truncate font-display text-base font-semibold tracking-tight">
+              DemandRadar
+            </div>
+            <div className="hidden truncate font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground sm:block">
+              Hyperlocal Intel
+            </div>
           </div>
         </Link>
 
@@ -71,7 +75,9 @@ export function AppHeader() {
 
       {open && (
         <div className="border-t border-border bg-background/90 px-4 py-3 md:hidden">
-          <div className="mb-3"><AIBadge compact /></div>
+          <div className="mb-3">
+            <AIBadge compact />
+          </div>
           <div className="grid gap-1">
             {NAV.map((n) => (
               <Link
