@@ -60,7 +60,7 @@
   /* Dark-first: these ARE the defaults. */
   --background: oklch(0.16 0.025 250);
   --foreground: oklch(0.97 0.01 240);
-  --surface: oklch(0.20 0.03 250);
+  --surface: oklch(0.2 0.03 250);
   --surface-2: oklch(0.235 0.035 250);
   --glass: oklch(0.22 0.035 250 / 0.55);
 
@@ -69,69 +69,107 @@
   --popover: oklch(0.21 0.032 250);
   --popover-foreground: oklch(0.97 0.01 240);
 
-  --primary: oklch(0.82 0.16 195);            /* electric teal */
+  --primary: oklch(0.82 0.16 195); /* electric teal */
   --primary-foreground: oklch(0.15 0.02 250);
   --primary-glow: oklch(0.88 0.18 195);
 
-  --secondary: oklch(0.68 0.18 250);          /* signal blue */
+  --secondary: oklch(0.68 0.18 250); /* signal blue */
   --secondary-foreground: oklch(0.97 0.01 240);
 
   --muted: oklch(0.26 0.03 250);
   --muted-foreground: oklch(0.72 0.02 240);
 
-  --accent: oklch(0.30 0.05 235);
+  --accent: oklch(0.3 0.05 235);
   --accent-foreground: oklch(0.97 0.01 240);
 
-  --warm: oklch(0.80 0.17 70);                /* urgency amber */
-  --destructive: oklch(0.68 0.22 25);         /* critical red */
+  --warm: oklch(0.8 0.17 70); /* urgency amber */
+  --destructive: oklch(0.68 0.22 25); /* critical red */
   --destructive-foreground: oklch(0.98 0.01 240);
 
   --border: oklch(1 0 0 / 0.08);
   --border-strong: oklch(1 0 0 / 0.16);
-  --input: oklch(1 0 0 / 0.10);
+  --input: oklch(1 0 0 / 0.1);
   --ring: oklch(0.82 0.16 195);
 
   --chart-1: oklch(0.82 0.16 195);
   --chart-2: oklch(0.68 0.18 250);
-  --chart-3: oklch(0.80 0.17 70);
+  --chart-3: oklch(0.8 0.17 70);
   --chart-4: oklch(0.68 0.22 25);
   --chart-5: oklch(0.75 0.16 145);
 
-  --gradient-radar: radial-gradient(circle at 50% 50%, oklch(0.82 0.16 195 / 0.35), transparent 70%);
+  --gradient-radar: radial-gradient(
+    circle at 50% 50%,
+    oklch(0.82 0.16 195 / 0.35),
+    transparent 70%
+  );
   --gradient-hero: linear-gradient(135deg, oklch(0.68 0.18 250) 0%, oklch(0.82 0.16 195) 100%);
-  --gradient-surface: linear-gradient(180deg, oklch(0.22 0.035 250 / 0.7), oklch(0.18 0.03 250 / 0.4));
+  --gradient-surface: linear-gradient(
+    180deg,
+    oklch(0.22 0.035 250 / 0.7),
+    oklch(0.18 0.03 250 / 0.4)
+  );
   --shadow-glow: 0 0 40px -8px oklch(0.82 0.16 195 / 0.55);
   --shadow-glow-blue: 0 0 60px -10px oklch(0.68 0.18 250 / 0.5);
   --shadow-elevated: 0 30px 80px -30px oklch(0 0 0 / 0.7);
 }
 
-.dark { /* alias — same tokens */ }
+.dark {
+  /* alias — same tokens */
+}
 
 @layer base {
-  * { border-color: var(--color-border); }
+  * {
+    border-color: var(--color-border);
+  }
   /* Defensive overflow guard: prevents any single overflowing child from
      introducing horizontal scroll on mobile. Real fixes still live at the
      component level (min-w-0 on flex children, max-w-full on visuals). */
-  html, body { background-color: var(--color-background); color: var(--color-foreground); overflow-x: hidden; max-width: 100%; }
+  html,
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    overflow-x: hidden;
+    max-width: 100%;
+  }
   body {
     font-family: var(--font-sans);
     font-feature-settings: "ss01", "cv11";
     -webkit-font-smoothing: antialiased;
     background-image:
       radial-gradient(ellipse 80% 50% at 50% -10%, oklch(0.68 0.18 250 / 0.18), transparent 60%),
-      radial-gradient(ellipse 60% 40% at 90% 10%, oklch(0.82 0.16 195 / 0.10), transparent 60%);
+      radial-gradient(ellipse 60% 40% at 90% 10%, oklch(0.82 0.16 195 / 0.1), transparent 60%);
     background-attachment: fixed;
     min-height: 100vh;
   }
   /* Media defaults — never let an image/SVG push its container wider than the viewport. */
-  img, svg, video, canvas { max-width: 100%; height: auto; }
-  h1, h2, h3, h4 { font-family: var(--font-display); letter-spacing: -0.02em; overflow-wrap: anywhere; }
-  ::selection { background: oklch(0.82 0.16 195 / 0.3); color: var(--color-foreground); }
+  img,
+  svg,
+  video,
+  canvas {
+    max-width: 100%;
+    height: auto;
+  }
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    letter-spacing: -0.02em;
+    overflow-wrap: anywhere;
+  }
+  ::selection {
+    background: oklch(0.82 0.16 195 / 0.3);
+    color: var(--color-foreground);
+  }
 }
 
 @layer utilities {
-  .font-display { font-family: var(--font-display); }
-  .font-mono { font-family: var(--font-mono); }
+  .font-display {
+    font-family: var(--font-display);
+  }
+  .font-mono {
+    font-family: var(--font-mono);
+  }
 
   .glass {
     background: var(--glass);
@@ -160,51 +198,98 @@
     color: transparent;
   }
 
-  .glow-teal { box-shadow: var(--shadow-glow); }
-  .glow-blue { box-shadow: var(--shadow-glow-blue); }
+  .glow-teal {
+    box-shadow: var(--shadow-glow);
+  }
+  .glow-blue {
+    box-shadow: var(--shadow-glow-blue);
+  }
 
   .shimmer {
-    background: linear-gradient(90deg,
-      transparent,
-      oklch(0.82 0.16 195 / 0.18),
-      transparent);
+    background: linear-gradient(90deg, transparent, oklch(0.82 0.16 195 / 0.18), transparent);
     background-size: 200% 100%;
     animation: shimmer 2.5s linear infinite;
   }
 }
 
 @keyframes shimmer {
-  0% { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
 }
 
 @keyframes radar-sweep {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 @keyframes radar-pulse {
-  0% { transform: scale(0.6); opacity: 0.9; }
-  100% { transform: scale(2.4); opacity: 0; }
+  0% {
+    transform: scale(0.6);
+    opacity: 0.9;
+  }
+  100% {
+    transform: scale(2.4);
+    opacity: 0;
+  }
 }
 
 @keyframes signal-blink {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.6; transform: scale(1.15); }
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(1.15);
+  }
 }
 
 @keyframes float-up {
-  0% { opacity: 0; transform: translateY(8px); }
-  100% { opacity: 1; transform: translateY(0); }
+  0% {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes ticker-in {
-  from { opacity: 0; transform: translateY(-8px); filter: blur(4px); }
-  to { opacity: 1; transform: translateY(0); filter: blur(0); }
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+    filter: blur(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
 }
 
-.anim-radar-sweep { animation: radar-sweep 6s linear infinite; transform-origin: center; }
-.anim-radar-pulse { animation: radar-pulse 2.4s ease-out infinite; }
-.anim-signal-blink { animation: signal-blink 2s ease-in-out infinite; }
-.anim-float-up { animation: float-up 0.5s ease-out both; }
-.anim-ticker-in { animation: ticker-in 0.55s cubic-bezier(0.2, 0.8, 0.2, 1) both; }
+.anim-radar-sweep {
+  animation: radar-sweep 6s linear infinite;
+  transform-origin: center;
+}
+.anim-radar-pulse {
+  animation: radar-pulse 2.4s ease-out infinite;
+}
+.anim-signal-blink {
+  animation: signal-blink 2s ease-in-out infinite;
+}
+.anim-float-up {
+  animation: float-up 0.5s ease-out both;
+}
+.anim-ticker-in {
+  animation: ticker-in 0.55s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}

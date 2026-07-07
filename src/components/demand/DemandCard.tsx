@@ -15,8 +15,10 @@ export function DemandCard({ d, onOpen, onUpvote, upvoted }: Props) {
   return (
     <div className="group relative overflow-hidden rounded-2xl border border-border bg-glass p-5 transition hover:border-primary/40 glass anim-float-up">
       {/* accent edge */}
-      <span className="pointer-events-none absolute inset-x-0 top-0 h-px"
-            style={{ background: `linear-gradient(90deg, transparent, ${meta.color}, transparent)` }} />
+      <span
+        className="pointer-events-none absolute inset-x-0 top-0 h-px"
+        style={{ background: `linear-gradient(90deg, transparent, ${meta.color}, transparent)` }}
+      />
 
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0 flex-1">

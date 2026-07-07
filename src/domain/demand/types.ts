@@ -53,11 +53,11 @@ export interface ClassifyOutput {
   category: DemandCategory;
   sub_category: string;
   affected_group: AffectedGroup;
-  urgency: number;            // 1-5
-  signal_strength: number;    // 0-100
+  urgency: number; // 1-5
+  signal_strength: number; // 0-100
   impact_priority: ImpactPriority;
   privacy_status: PrivacyStatus;
-  confidence_score: number;   // 0-100
+  confidence_score: number; // 0-100
   recommended_actor: RecommendedActor;
   suggested_action: string;
   similar_reports_count: number;
@@ -76,22 +76,23 @@ export interface DemandReport extends ClassifyOutput {
   upvotes: number;
 }
 
-export const CATEGORY_META: Record<DemandCategory, { label: string; icon: string; color: string }> = {
-  study_space:    { label: "Study Space",        icon: "BookOpen",   color: "oklch(0.82 0.16 195)" },
-  food:           { label: "Affordable Food",    icon: "UtensilsCrossed", color: "oklch(0.80 0.17 70)" },
-  fitness:        { label: "Fitness / Gym",      icon: "Dumbbell",   color: "oklch(0.75 0.16 145)" },
-  pharmacy:       { label: "Pharmacy / Health",  icon: "Pill",       color: "oklch(0.68 0.22 25)" },
-  pg_hostel:      { label: "PG / Hostel",        icon: "Building2",  color: "oklch(0.68 0.18 250)" },
-  printing:       { label: "Printing / Copy",    icon: "Printer",    color: "oklch(0.72 0.13 280)" },
-  transport:      { label: "Transport",          icon: "Bus",        color: "oklch(0.75 0.18 220)" },
-  laundry:        { label: "Laundry",            icon: "Shirt",      color: "oklch(0.78 0.13 165)" },
-  mental_health:  { label: "Mental Health",      icon: "HeartPulse", color: "oklch(0.78 0.15 320)" },
-  grocery:        { label: "Grocery",            icon: "ShoppingBasket", color: "oklch(0.78 0.16 110)" },
-  womens_safety:  { label: "Women's Safety",     icon: "ShieldAlert",color: "oklch(0.70 0.22 15)" },
-  daycare:        { label: "Daycare",            icon: "Baby",       color: "oklch(0.80 0.13 50)" },
-  atm:            { label: "ATM / Finance",      icon: "Landmark",   color: "oklch(0.78 0.10 90)" },
-  other:          { label: "Other",              icon: "Sparkles",   color: "oklch(0.70 0.04 250)" },
-};
+export const CATEGORY_META: Record<DemandCategory, { label: string; icon: string; color: string }> =
+  {
+    study_space: { label: "Study Space", icon: "BookOpen", color: "oklch(0.82 0.16 195)" },
+    food: { label: "Affordable Food", icon: "UtensilsCrossed", color: "oklch(0.80 0.17 70)" },
+    fitness: { label: "Fitness / Gym", icon: "Dumbbell", color: "oklch(0.75 0.16 145)" },
+    pharmacy: { label: "Pharmacy / Health", icon: "Pill", color: "oklch(0.68 0.22 25)" },
+    pg_hostel: { label: "PG / Hostel", icon: "Building2", color: "oklch(0.68 0.18 250)" },
+    printing: { label: "Printing / Copy", icon: "Printer", color: "oklch(0.72 0.13 280)" },
+    transport: { label: "Transport", icon: "Bus", color: "oklch(0.75 0.18 220)" },
+    laundry: { label: "Laundry", icon: "Shirt", color: "oklch(0.78 0.13 165)" },
+    mental_health: { label: "Mental Health", icon: "HeartPulse", color: "oklch(0.78 0.15 320)" },
+    grocery: { label: "Grocery", icon: "ShoppingBasket", color: "oklch(0.78 0.16 110)" },
+    womens_safety: { label: "Women's Safety", icon: "ShieldAlert", color: "oklch(0.70 0.22 15)" },
+    daycare: { label: "Daycare", icon: "Baby", color: "oklch(0.80 0.13 50)" },
+    atm: { label: "ATM / Finance", icon: "Landmark", color: "oklch(0.78 0.10 90)" },
+    other: { label: "Other", icon: "Sparkles", color: "oklch(0.70 0.04 250)" },
+  };
 
 export const ACTOR_LABEL: Record<RecommendedActor, string> = {
   local_business: "Local Business",
@@ -102,15 +103,32 @@ export const ACTOR_LABEL: Record<RecommendedActor, string> = {
 };
 
 export const PRIORITY_RANK: Record<ImpactPriority, number> = {
-  low: 1, medium: 2, high: 3, critical: 4,
+  low: 1,
+  medium: 2,
+  high: 3,
+  critical: 4,
 };
 
 // --- LAYER 2: NEW DOMAIN SCHEMA ---
 
 export type SubmissionInputMethod = "text" | "voice" | "whatsapp_forward";
-export type LocationSource = "browser_gps" | "manual_area" | "manual_pin" | "typed_address" | "mappls_geocode" | "mappls_reverse_geocode" | "internal_bengaluru_zone" | "unknown";
+export type LocationSource =
+  | "browser_gps"
+  | "manual_area"
+  | "manual_pin"
+  | "typed_address"
+  | "mappls_geocode"
+  | "mappls_reverse_geocode"
+  | "internal_bengaluru_zone"
+  | "unknown";
 export type LocationProvider = "internal" | "browser" | "mappls" | "google_maps" | "none";
-export type LocationPrecision = "exact" | "approximate" | "micro_area" | "area_level" | "city_level" | "unknown";
+export type LocationPrecision =
+  | "exact"
+  | "approximate"
+  | "micro_area"
+  | "area_level"
+  | "city_level"
+  | "unknown";
 
 export interface ResolvedLocation {
   latitude: number | null;
@@ -133,8 +151,22 @@ export interface ResolvedLocation {
   privacy_fuzz_meters?: number;
 }
 
-export type SubmissionIntentType = "new_demand" | "support_existing_demand" | "evidence_addition" | "service_search_query" | "feedback_about_app" | "spam_or_irrelevant" | "safety_or_emergency";
-export type DemandNature = "missing_service" | "poor_quality" | "overpriced" | "inaccessible" | "capacity_gap" | "timing_gap" | "safety_gap";
+export type SubmissionIntentType =
+  | "new_demand"
+  | "support_existing_demand"
+  | "evidence_addition"
+  | "service_search_query"
+  | "feedback_about_app"
+  | "spam_or_irrelevant"
+  | "safety_or_emergency";
+export type DemandNature =
+  | "missing_service"
+  | "poor_quality"
+  | "overpriced"
+  | "inaccessible"
+  | "capacity_gap"
+  | "timing_gap"
+  | "safety_gap";
 export type EffortSignal = "wish" | "searched" | "tried_failed" | "workaround";
 export type DemandRecurrence = "daily" | "weekly" | "rare" | "one_time";
 export type TimeOfDay = "morning" | "afternoon" | "evening" | "night" | "any";
@@ -202,17 +234,17 @@ export interface DemandCard {
   title: string;
   need_summary: string;
   status: DemandStatus;
-  
+
   submission: DemandSubmission;
   location: ResolvedLocation;
   classification: DemandIntentClassification;
   evidence: DemandEvidence[];
   interest_signals?: InterestSignal[];
   quality_flags: DemandQualityFlag[];
-  
+
   co_sign_count: number;
   similar_reports_count: number;
-  
+
   signal_strength: number;
   impact_priority: ImpactPriority;
   privacy_status: PrivacyStatus;

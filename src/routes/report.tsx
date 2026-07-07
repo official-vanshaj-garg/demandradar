@@ -7,14 +7,23 @@ import { ACTOR_LABEL, CATEGORY_META } from "@/domain/demand";
 import { BLR_ZONES, projectToCanvas } from "@/lib/geo/bengaluru";
 import { resolveLocation } from "@/lib/location";
 import { addDemand, getSessionId } from "@/lib/data/store";
-import { ConfidenceBar, ImpactPriorityTag, SignalStrengthMeter, UrgencyChip } from "@/components/demand/Indicators";
+import {
+  ConfidenceBar,
+  ImpactPriorityTag,
+  SignalStrengthMeter,
+  UrgencyChip,
+} from "@/components/demand/Indicators";
 import { AIBadge } from "@/components/layout/AIBadge";
 
 export const Route = createFileRoute("/report")({
   head: () => ({
     meta: [
       { title: "Report a Need · DemandRadar" },
-      { name: "description", content: "Tell DemandRadar what your area is missing. We turn it into a structured Demand Card in seconds." },
+      {
+        name: "description",
+        content:
+          "Tell DemandRadar what your area is missing. We turn it into a structured Demand Card in seconds.",
+      },
     ],
   }),
   component: ReportPage,
@@ -31,7 +40,10 @@ function StepDots({ step }: { step: number }) {
   return (
     <div className="flex items-center gap-2">
       {[1, 2, 3, 4].map((n) => (
-        <div key={n} className={"h-1.5 w-8 rounded-full " + (step >= n ? "bg-primary" : "bg-muted")} />
+        <div
+          key={n}
+          className={"h-1.5 w-8 rounded-full " + (step >= n ? "bg-primary" : "bg-muted")}
+        />
       ))}
     </div>
   );
@@ -56,7 +68,10 @@ function ReportPage() {
   );
   const [locationMessage, setLocationMessage] = useState<string | null>(null);
 
-  const zone = useMemo(() => (zoneKey ? BLR_ZONES.find((z) => z.key === zoneKey) ?? null : null), [zoneKey]);
+  const zone = useMemo(
+    () => (zoneKey ? (BLR_ZONES.find((z) => z.key === zoneKey) ?? null) : null),
+    [zoneKey],
+  );
 
   function pickZone(key: string) {
     if (key !== zoneKey) {
@@ -70,7 +85,7 @@ function ReportPage() {
   function jitter(n: number, seed: string, salt: number) {
     let h = salt;
     for (let i = 0; i < seed.length; i++) h = (h * 31 + seed.charCodeAt(i)) >>> 0;
-    const r = ((h % 10000) / 10000) - 0.5; // -0.5..0.5
+    const r = (h % 10000) / 10000 - 0.5; // -0.5..0.5
     return n + r * 0.018; // ~±1km
   }
 
@@ -125,7 +140,9 @@ function ReportPage() {
       });
       setCard(out);
       setStep(3);
-    } finally { setRunning(false); }
+    } finally {
+      setRunning(false);
+    }
   }
 
   function submit() {
@@ -175,8 +192,12 @@ function ReportPage() {
     <div className="mx-auto max-w-5xl px-4 py-12 sm:px-6">
       <div className="mb-6 flex items-center justify-between gap-4">
         <div>
-          <div className="font-mono text-[10px] uppercase tracking-[0.22em] text-primary">Report a Need</div>
-          <h1 className="mt-1 font-display text-3xl font-semibold sm:text-4xl">Tell DemandRadar what's missing</h1>
+          <div className="font-mono text-[10px] uppercase tracking-[0.22em] text-primary">
+            Report a Need
+          </div>
+          <h1 className="mt-1 font-display text-3xl font-semibold sm:text-4xl">
+            Tell DemandRadar what's missing
+          </h1>
           <p className="mt-1 text-sm text-muted-foreground">Anonymous · privacy-safe · no login.</p>
         </div>
         <AIBadge />
@@ -184,7 +205,9 @@ function ReportPage() {
 
       <div className="mb-6 flex items-center gap-3">
         <StepDots step={step} />
-        <span className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">Step {step} of 4</span>
+        <span className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+          Step {step} of 4
+        </span>
       </div>
 
       <div className="grid gap-6 lg:grid-cols-[1.4fr_1fr]">
@@ -192,7 +215,9 @@ function ReportPage() {
           {step === 1 && (
             <div>
               <h2 className="font-display text-xl font-semibold">1. Describe the need</h2>
-              <p className="mt-1 text-sm text-muted-foreground">Plain language is fine. Phone numbers and emails are auto-redacted.</p>
+              <p className="mt-1 text-sm text-muted-foreground">
+                Plain language is fine. Phone numbers and emails are auto-redacted.
+              </p>
               <textarea
                 value={text}
                 onChange={(e) => setText(e.target.value)}
@@ -202,13 +227,21 @@ function ReportPage() {
               />
               <div className="mt-3 flex flex-wrap gap-2">
                 {EXAMPLES.map((ex) => (
-                  <button key={ex} onClick={() => setText(ex)} className="rounded-full border border-border bg-surface/40 px-3 py-1 text-xs text-muted-foreground hover:border-primary/40 hover:text-primary">
+                  <button
+                    key={ex}
+                    onClick={() => setText(ex)}
+                    className="rounded-full border border-border bg-surface/40 px-3 py-1 text-xs text-muted-foreground hover:border-primary/40 hover:text-primary"
+                  >
                     {ex.slice(0, 38)}…
                   </button>
                 ))}
               </div>
               <div className="mt-6 flex justify-end">
-                <button disabled={text.trim().length < 12} onClick={() => setStep(2)} className="inline-flex items-center gap-2 rounded-md bg-gradient-to-r from-secondary to-primary px-4 py-2 text-sm font-medium text-primary-foreground disabled:opacity-50">
+                <button
+                  disabled={text.trim().length < 12}
+                  onClick={() => setStep(2)}
+                  className="inline-flex items-center gap-2 rounded-md bg-gradient-to-r from-secondary to-primary px-4 py-2 text-sm font-medium text-primary-foreground disabled:opacity-50"
+                >
                   Next: Location <ArrowRight className="h-4 w-4" />
                 </button>
               </div>
@@ -218,7 +251,9 @@ function ReportPage() {
           {step === 2 && (
             <div>
               <h2 className="font-display text-xl font-semibold">2. Where in Bengaluru?</h2>
-              <p className="mt-1 text-sm text-muted-foreground">Coordinates are rounded to ~110m for privacy.</p>
+              <p className="mt-1 text-sm text-muted-foreground">
+                Coordinates are rounded to ~110m for privacy.
+              </p>
               <div className="mt-4 flex flex-wrap items-center gap-2">
                 <button
                   type="button"
@@ -235,7 +270,10 @@ function ReportPage() {
                 </button>
                 {locationMessage && (
                   <span
-                    className={"text-xs " + (locationStatus === "failed" ? "text-destructive" : "text-primary")}
+                    className={
+                      "text-xs " +
+                      (locationStatus === "failed" ? "text-destructive" : "text-primary")
+                    }
                   >
                     {locationMessage}
                   </span>
@@ -254,7 +292,8 @@ function ReportPage() {
                     }
                   >
                     <div className="flex items-center gap-1.5">
-                      <MapPin className="h-3 w-3 text-primary" /> <span className="font-medium text-foreground">{z.label}</span>
+                      <MapPin className="h-3 w-3 text-primary" />{" "}
+                      <span className="font-medium text-foreground">{z.label}</span>
                     </div>
                     <div className="mt-1 font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
                       {z.lat.toFixed(3)}, {z.lng.toFixed(3)}
@@ -263,18 +302,38 @@ function ReportPage() {
                 ))}
               </div>
               <div className="mt-4">
-                <label className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">Specific landmark (optional)</label>
-                <input value={locText} onChange={(e) => setLocText(e.target.value)} placeholder={`e.g. Near landmark in ${zone?.label ?? "your area"}`}
-                       className="mt-1 w-full rounded-md border border-border bg-background/50 p-2.5 text-sm outline-none focus:border-primary/60" />
+                <label className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+                  Specific landmark (optional)
+                </label>
+                <input
+                  value={locText}
+                  onChange={(e) => setLocText(e.target.value)}
+                  placeholder={`e.g. Near landmark in ${zone?.label ?? "your area"}`}
+                  className="mt-1 w-full rounded-md border border-border bg-background/50 p-2.5 text-sm outline-none focus:border-primary/60"
+                />
               </div>
               <div className="mt-6 flex justify-between">
-                <button onClick={() => setStep(1)} className="inline-flex items-center gap-2 rounded-md border border-border px-4 py-2 text-sm">
+                <button
+                  onClick={() => setStep(1)}
+                  className="inline-flex items-center gap-2 rounded-md border border-border px-4 py-2 text-sm"
+                >
                   <ArrowLeft className="h-4 w-4" /> Back
                 </button>
-                <button onClick={runClassify} disabled={running || !zone}
-                        title={!zone ? "Pick a zone first" : undefined}
-                        className="inline-flex items-center gap-2 rounded-md bg-gradient-to-r from-secondary to-primary px-4 py-2 text-sm font-medium text-primary-foreground disabled:opacity-50">
-                  {running ? <><Loader2 className="h-4 w-4 animate-spin" /> Analyzing…</> : <><Sparkles className="h-4 w-4" /> Generate Demand Card</>}
+                <button
+                  onClick={runClassify}
+                  disabled={running || !zone}
+                  title={!zone ? "Pick a zone first" : undefined}
+                  className="inline-flex items-center gap-2 rounded-md bg-gradient-to-r from-secondary to-primary px-4 py-2 text-sm font-medium text-primary-foreground disabled:opacity-50"
+                >
+                  {running ? (
+                    <>
+                      <Loader2 className="h-4 w-4 animate-spin" /> Analyzing…
+                    </>
+                  ) : (
+                    <>
+                      <Sparkles className="h-4 w-4" /> Generate Demand Card
+                    </>
+                  )}
                 </button>
               </div>
             </div>
@@ -283,13 +342,21 @@ function ReportPage() {
           {step === 3 && card && zone && (
             <div>
               <h2 className="font-display text-xl font-semibold">3. Preview Demand Card</h2>
-              <p className="mt-1 text-sm text-muted-foreground">Structured by the DemandRadar intelligence layer · demo mode.</p>
+              <p className="mt-1 text-sm text-muted-foreground">
+                Structured by the DemandRadar intelligence layer · demo mode.
+              </p>
               <DemandPreview card={card} area={zone.label} location={locText || zone.label} />
               <div className="mt-6 flex justify-between">
-                <button onClick={() => setStep(2)} className="inline-flex items-center gap-2 rounded-md border border-border px-4 py-2 text-sm">
+                <button
+                  onClick={() => setStep(2)}
+                  className="inline-flex items-center gap-2 rounded-md border border-border px-4 py-2 text-sm"
+                >
                   <ArrowLeft className="h-4 w-4" /> Edit
                 </button>
-                <button onClick={submit} className="inline-flex items-center gap-2 rounded-md bg-gradient-to-r from-secondary to-primary px-4 py-2 text-sm font-medium text-primary-foreground">
+                <button
+                  onClick={submit}
+                  className="inline-flex items-center gap-2 rounded-md bg-gradient-to-r from-secondary to-primary px-4 py-2 text-sm font-medium text-primary-foreground"
+                >
                   <Check className="h-4 w-4" /> Submit Signal
                 </button>
               </div>
@@ -301,17 +368,44 @@ function ReportPage() {
               <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-primary/15 text-primary glow-teal">
                 <Check className="h-8 w-8" />
               </div>
-              <h2 className="mt-4 font-display text-2xl font-semibold">Signal received in {submitted.area_label}.</h2>
-              <p className="mt-1 text-sm text-muted-foreground">Your Demand Card is now live on the DemandRadar Bengaluru pilot — visible on the dashboard, map and insights in real time.</p>
+              <h2 className="mt-4 font-display text-2xl font-semibold">
+                Signal received in {submitted.area_label}.
+              </h2>
+              <p className="mt-1 text-sm text-muted-foreground">
+                Your Demand Card is now live on the DemandRadar Bengaluru pilot — visible on the
+                dashboard, map and insights in real time.
+              </p>
               <div className="mx-auto mt-6 max-w-md rounded-xl border border-primary/30 bg-primary/5 p-4 text-left">
-                <div className="font-mono text-[10px] uppercase tracking-widest text-primary">{CATEGORY_META[submitted.category].label}</div>
+                <div className="font-mono text-[10px] uppercase tracking-widest text-primary">
+                  {CATEGORY_META[submitted.category].label}
+                </div>
                 <div className="mt-1 text-sm font-semibold">{submitted.title}</div>
-                <div className="mt-1 text-xs text-muted-foreground">{submitted.area_label} · signal {submitted.signal_strength} · {submitted.impact_priority} impact</div>
+                <div className="mt-1 text-xs text-muted-foreground">
+                  {submitted.area_label} · signal {submitted.signal_strength} ·{" "}
+                  {submitted.impact_priority} impact
+                </div>
               </div>
               <div className="mt-6 flex justify-center gap-3">
-                <Link to="/dashboard" className="rounded-md bg-gradient-to-r from-secondary to-primary px-4 py-2 text-sm font-medium text-primary-foreground">View dashboard</Link>
-                <Link to="/map" className="rounded-md border border-border px-4 py-2 text-sm">See on map</Link>
-                <button onClick={() => { setStep(1); setText(""); setCard(null); setSubmitted(null); }} className="rounded-md border border-border px-4 py-2 text-sm">Report another</button>
+                <Link
+                  to="/dashboard"
+                  className="rounded-md bg-gradient-to-r from-secondary to-primary px-4 py-2 text-sm font-medium text-primary-foreground"
+                >
+                  View dashboard
+                </Link>
+                <Link to="/map" className="rounded-md border border-border px-4 py-2 text-sm">
+                  See on map
+                </Link>
+                <button
+                  onClick={() => {
+                    setStep(1);
+                    setText("");
+                    setCard(null);
+                    setSubmitted(null);
+                  }}
+                  className="rounded-md border border-border px-4 py-2 text-sm"
+                >
+                  Report another
+                </button>
               </div>
             </div>
           )}
@@ -319,8 +413,12 @@ function ReportPage() {
 
         {/* Side context panel */}
         <aside className="rounded-2xl border border-border bg-glass p-5 glass">
-          <div className="font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">Pilot zone</div>
-          <h3 className="mt-1 font-display text-lg font-semibold">{zone?.label ?? "Pick a zone"}</h3>
+          <div className="font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
+            Pilot zone
+          </div>
+          <h3 className="mt-1 font-display text-lg font-semibold">
+            {zone?.label ?? "Pick a zone"}
+          </h3>
           <div className="mt-3 aspect-square rounded-xl border border-border bg-[oklch(0.14_0.025_250)] p-2">
             <svg viewBox="0 0 100 100" className="h-full w-full">
               {BLR_ZONES.map((z) => {
@@ -328,9 +426,27 @@ function ReportPage() {
                 const p = projectToCanvas(z.lat, z.lng);
                 return (
                   <g key={z.key}>
-                    <circle cx={p.x} cy={p.y} r={active ? 3.6 : 1.8} fill={active ? "oklch(0.82 0.16 195)" : "oklch(0.7 0.04 240 / 0.5)"}
-                            style={{ filter: active ? "drop-shadow(0 0 3px oklch(0.82 0.16 195))" : undefined }} />
-                    {active && <circle cx={p.x} cy={p.y} r={3.6} fill="none" stroke="oklch(0.82 0.16 195)" strokeWidth="0.4" className="anim-radar-pulse" style={{ transformOrigin: `${p.x}px ${p.y}px` }} />}
+                    <circle
+                      cx={p.x}
+                      cy={p.y}
+                      r={active ? 3.6 : 1.8}
+                      fill={active ? "oklch(0.82 0.16 195)" : "oklch(0.7 0.04 240 / 0.5)"}
+                      style={{
+                        filter: active ? "drop-shadow(0 0 3px oklch(0.82 0.16 195))" : undefined,
+                      }}
+                    />
+                    {active && (
+                      <circle
+                        cx={p.x}
+                        cy={p.y}
+                        r={3.6}
+                        fill="none"
+                        stroke="oklch(0.82 0.16 195)"
+                        strokeWidth="0.4"
+                        className="anim-radar-pulse"
+                        style={{ transformOrigin: `${p.x}px ${p.y}px` }}
+                      />
+                    )}
                   </g>
                 );
               })}
@@ -348,13 +464,26 @@ function ReportPage() {
   );
 }
 
-function DemandPreview({ card, area, location }: { card: ClassifyOutput; area: string; location: string }) {
+function DemandPreview({
+  card,
+  area,
+  location,
+}: {
+  card: ClassifyOutput;
+  area: string;
+  location: string;
+}) {
   const meta = CATEGORY_META[card.category];
   return (
     <div className="mt-4 rounded-2xl border border-primary/30 bg-primary/[0.04] p-5">
       <div className="flex items-start justify-between gap-4">
         <div className="min-w-0 flex-1">
-          <div className="font-mono text-[10px] uppercase tracking-[0.18em]" style={{ color: meta.color }}>{meta.label} · {card.sub_category}</div>
+          <div
+            className="font-mono text-[10px] uppercase tracking-[0.18em]"
+            style={{ color: meta.color }}
+          >
+            {meta.label} · {card.sub_category}
+          </div>
           <h3 className="mt-1 font-display text-lg font-semibold leading-snug">{card.title}</h3>
           <p className="mt-1 text-sm text-muted-foreground">{card.need_summary}</p>
         </div>
@@ -363,12 +492,20 @@ function DemandPreview({ card, area, location }: { card: ClassifyOutput; area: s
       <div className="mt-4 flex flex-wrap items-center gap-2">
         <UrgencyChip value={card.urgency} />
         <ImpactPriorityTag value={card.impact_priority} />
-        <span className="rounded-md bg-muted/40 px-2 py-0.5 text-[11px] text-muted-foreground">Affected: {card.affected_group.replace("_", " ")}</span>
-        <span className="rounded-md bg-muted/40 px-2 py-0.5 text-[11px] text-muted-foreground">Privacy: {card.privacy_status}</span>
+        <span className="rounded-md bg-muted/40 px-2 py-0.5 text-[11px] text-muted-foreground">
+          Affected: {card.affected_group.replace("_", " ")}
+        </span>
+        <span className="rounded-md bg-muted/40 px-2 py-0.5 text-[11px] text-muted-foreground">
+          Privacy: {card.privacy_status}
+        </span>
       </div>
-      <div className="mt-4"><ConfidenceBar value={card.confidence_score} /></div>
+      <div className="mt-4">
+        <ConfidenceBar value={card.confidence_score} />
+      </div>
       <div className="mt-4 grid gap-2 sm:grid-cols-2">
-        <Field label="Location">{location} · {area}</Field>
+        <Field label="Location">
+          {location} · {area}
+        </Field>
         <Field label="Recommended actor">{ACTOR_LABEL[card.recommended_actor]}</Field>
         <Field label="Similar reports nearby">{card.similar_reports_count}</Field>
         <Field label="Suggested action">{card.suggested_action}</Field>
@@ -380,7 +517,9 @@ function DemandPreview({ card, area, location }: { card: ClassifyOutput; area: s
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div className="rounded-md border border-border bg-background/40 p-2.5">
-      <div className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">{label}</div>
+      <div className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+        {label}
+      </div>
       <div className="mt-0.5 text-sm">{children}</div>
     </div>
   );

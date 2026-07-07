@@ -5,22 +5,28 @@ This file records useful commands used while building DemandRadar.
 ## Git Basics
 
 ### git status --short
+
 Shows changed, staged, or untracked files.
 Empty output means the working tree is clean.
 
 ### git branch --show-current
+
 Shows the current branch.
 
 ### git log --oneline -5
+
 Shows recent commits in compact form.
 
 ### git add .
+
 Stages all changed files for the next commit.
 
 ### git commit -m "message"
+
 Creates a local snapshot of staged changes.
 
 ### git push
+
 Uploads local commits to GitHub.
 
 ## Project Notes

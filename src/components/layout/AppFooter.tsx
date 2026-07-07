@@ -17,31 +17,63 @@ export function AppFooter() {
           </p>
         </div>
         <div>
-          <div className="font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">Product</div>
+          <div className="font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
+            Product
+          </div>
           <ul className="mt-3 space-y-1.5 text-sm">
-            <li><Link to="/report" className="hover:text-primary">Report a Need</Link></li>
-            <li><Link to="/map" className="hover:text-primary">Demand Map</Link></li>
-            <li><Link to="/dashboard" className="hover:text-primary">Intelligence Dashboard</Link></li>
-            <li><Link to="/insights" className="hover:text-primary">Insights</Link></li>
+            <li>
+              <Link to="/report" className="hover:text-primary">
+                Report a Need
+              </Link>
+            </li>
+            <li>
+              <Link to="/map" className="hover:text-primary">
+                Demand Map
+              </Link>
+            </li>
+            <li>
+              <Link to="/dashboard" className="hover:text-primary">
+                Intelligence Dashboard
+              </Link>
+            </li>
+            <li>
+              <Link to="/insights" className="hover:text-primary">
+                Insights
+              </Link>
+            </li>
           </ul>
         </div>
         <div>
-          <div className="font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">Company</div>
+          <div className="font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
+            Company
+          </div>
           <ul className="mt-3 space-y-1.5 text-sm">
-            <li><Link to="/about" className="hover:text-primary">About</Link></li>
-            <li><span className="text-muted-foreground">Pilot: Bengaluru</span></li>
-            <li><span className="text-muted-foreground">Demo · AI model adapter ready</span></li>
+            <li>
+              <Link to="/about" className="hover:text-primary">
+                About
+              </Link>
+            </li>
+            <li>
+              <span className="text-muted-foreground">Pilot: Bengaluru</span>
+            </li>
+            <li>
+              <span className="text-muted-foreground">Demo · AI model adapter ready</span>
+            </li>
           </ul>
         </div>
         <div>
-          <div className="font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">Privacy</div>
+          <div className="font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
+            Privacy
+          </div>
           <p className="mt-3 text-sm text-muted-foreground">
-            Anonymous reporting. No PII collected. Coordinates rounded to ~110m. Personal contacts auto-redacted.
+            Anonymous reporting. No PII collected. Coordinates rounded to ~110m. Personal contacts
+            auto-redacted.
           </p>
         </div>
       </div>
       <div className="border-t border-border py-4 text-center text-xs text-muted-foreground">
-        © {new Date().getFullYear()} DemandRadar · Reveal what your community needs before anyone else sees it.
+        © {new Date().getFullYear()} DemandRadar · Reveal what your community needs before anyone
+        else sees it.
       </div>
     </footer>
   );

@@ -14,18 +14,62 @@ import type {
 } from "@/domain/demand";
 
 const KEYWORDS: Array<{ cat: DemandCategory; sub: string; words: string[] }> = [
-  { cat: "study_space", sub: "24h study library", words: ["study", "library", "quiet", "exam", "wifi", "coworking"] },
-  { cat: "food", sub: "Affordable meals < ₹100", words: ["food", "meal", "thali", "tiffin", "mess", "canteen", "lunch", "dinner", "breakfast"] },
-  { cat: "fitness", sub: "Affordable gym", words: ["gym", "fitness", "workout", "yoga", "zumba", "trainer"] },
-  { cat: "pharmacy", sub: "24x7 pharmacy", words: ["pharmacy", "medicine", "chemist", "medical", "prescription", "tablet"] },
-  { cat: "pg_hostel", sub: "PG / hostel listing", words: ["pg", "hostel", "room", "rent", "accommodation", "stay"] },
-  { cat: "printing", sub: "Cheap photocopy / printing", words: ["print", "xerox", "photocopy", "scan", "binding"] },
-  { cat: "transport", sub: "Last-mile transport", words: ["bus", "auto", "metro", "transport", "shuttle", "commute", "ride"] },
+  {
+    cat: "study_space",
+    sub: "24h study library",
+    words: ["study", "library", "quiet", "exam", "wifi", "coworking"],
+  },
+  {
+    cat: "food",
+    sub: "Affordable meals < ₹100",
+    words: ["food", "meal", "thali", "tiffin", "mess", "canteen", "lunch", "dinner", "breakfast"],
+  },
+  {
+    cat: "fitness",
+    sub: "Affordable gym",
+    words: ["gym", "fitness", "workout", "yoga", "zumba", "trainer"],
+  },
+  {
+    cat: "pharmacy",
+    sub: "24x7 pharmacy",
+    words: ["pharmacy", "medicine", "chemist", "medical", "prescription", "tablet"],
+  },
+  {
+    cat: "pg_hostel",
+    sub: "PG / hostel listing",
+    words: ["pg", "hostel", "room", "rent", "accommodation", "stay"],
+  },
+  {
+    cat: "printing",
+    sub: "Cheap photocopy / printing",
+    words: ["print", "xerox", "photocopy", "scan", "binding"],
+  },
+  {
+    cat: "transport",
+    sub: "Last-mile transport",
+    words: ["bus", "auto", "metro", "transport", "shuttle", "commute", "ride"],
+  },
   { cat: "laundry", sub: "Affordable laundry", words: ["laundry", "wash", "ironing", "dryclean"] },
-  { cat: "mental_health", sub: "Counselling access", words: ["stress", "anxiety", "therapy", "counsell", "mental", "depress"] },
-  { cat: "grocery", sub: "Local kirana / grocery", words: ["grocery", "vegetable", "kirana", "supermarket", "fruits"] },
-  { cat: "womens_safety", sub: "Safe streets / lighting", words: ["safety", "unsafe", "harass", "lighting", "dark street", "women"] },
-  { cat: "daycare", sub: "Childcare / creche", words: ["daycare", "creche", "child", "kid", "toddler"] },
+  {
+    cat: "mental_health",
+    sub: "Counselling access",
+    words: ["stress", "anxiety", "therapy", "counsell", "mental", "depress"],
+  },
+  {
+    cat: "grocery",
+    sub: "Local kirana / grocery",
+    words: ["grocery", "vegetable", "kirana", "supermarket", "fruits"],
+  },
+  {
+    cat: "womens_safety",
+    sub: "Safe streets / lighting",
+    words: ["safety", "unsafe", "harass", "lighting", "dark street", "women"],
+  },
+  {
+    cat: "daycare",
+    sub: "Childcare / creche",
+    words: ["daycare", "creche", "child", "kid", "toddler"],
+  },
   { cat: "atm", sub: "Working ATM", words: ["atm", "cash", "bank"] },
 ];
 
@@ -33,7 +77,10 @@ const REDACT_RE = /(\+?\d[\d\s-]{7,}\d|\b[\w.+-]+@[\w-]+\.[\w.-]+\b|\b\d{12}\b)/
 
 function redact(text: string): { text: string; changed: boolean } {
   let changed = false;
-  const out = text.replace(REDACT_RE, () => { changed = true; return "[redacted]"; });
+  const out = text.replace(REDACT_RE, () => {
+    changed = true;
+    return "[redacted]";
+  });
   return { text: out, changed };
 }
 
@@ -61,10 +108,14 @@ function pickAffectedGroup(text: string, cat: DemandCategory): AffectedGroup {
 
 function pickActor(cat: DemandCategory): RecommendedActor {
   switch (cat) {
-    case "transport": return "transport_authority";
-    case "womens_safety": return "government";
-    case "mental_health": return "ngo";
-    case "daycare": return "ngo";
+    case "transport":
+      return "transport_authority";
+    case "womens_safety":
+      return "government";
+    case "mental_health":
+      return "ngo";
+    case "daycare":
+      return "ngo";
     case "study_space":
     case "food":
     case "fitness":
@@ -75,7 +126,8 @@ function pickActor(cat: DemandCategory): RecommendedActor {
     case "grocery":
     case "atm":
       return "local_business";
-    default: return "community";
+    default:
+      return "community";
   }
 }
 
@@ -115,7 +167,8 @@ function makeAction(cat: DemandCategory, actor: RecommendedActor, area?: string)
   if (cat === "study_space") return `Open a 24-hour quiet study space${where}.`;
   if (cat === "food") return `Set up an affordable thali / tiffin service${where}.`;
   if (cat === "fitness") return `Launch a budget gym or fitness micro-studio${where}.`;
-  if (cat === "pharmacy") return `Add a 24x7 pharmacy${where} or stock essentials at existing kirana.`;
+  if (cat === "pharmacy")
+    return `Add a 24x7 pharmacy${where} or stock essentials at existing kirana.`;
   if (cat === "pg_hostel") return `List verified PG / hostel inventory${where}.`;
   if (cat === "printing") return `Add a printing / photocopy point${where}.`;
   if (cat === "transport") return `Add a feeder shuttle${where} during peak hours.`;
@@ -125,7 +178,7 @@ function makeAction(cat: DemandCategory, actor: RecommendedActor, area?: string)
   if (cat === "womens_safety") return `Improve street lighting and patrol routes${where}.`;
   if (cat === "daycare") return `Open a verified daycare / creche${where}.`;
   if (cat === "atm") return `Service or install a working ATM${where}.`;
-  return `Investigate the demand pattern${where} and route to the right ${actor.replace("_"," ") }.`;
+  return `Investigate the demand pattern${where} and route to the right ${actor.replace("_", " ")}.`;
 }
 
 // Deterministic small hash → 0..1 (so signal_strength/confidence vary but are stable)
@@ -147,8 +200,14 @@ export function mockClassify(input: ClassifyInput): ClassifyOutput {
   const lengthBoost = Math.min(20, Math.floor(clean.length / 20));
   const keywordBoost = Math.min(25, score * 8);
   const noiseSeed = h(clean + (input.location_context?.area_label || ""));
-  const signal = Math.max(35, Math.min(95, 50 + lengthBoost + keywordBoost + Math.floor(noiseSeed * 15)));
-  const confidence = Math.max(55, Math.min(96, 70 + keywordBoost + Math.floor(noiseSeed * 10) - (cat === "other" ? 15 : 0)));
+  const signal = Math.max(
+    35,
+    Math.min(95, 50 + lengthBoost + keywordBoost + Math.floor(noiseSeed * 15)),
+  );
+  const confidence = Math.max(
+    55,
+    Math.min(96, 70 + keywordBoost + Math.floor(noiseSeed * 10) - (cat === "other" ? 15 : 0)),
+  );
   const similar = Math.max(1, Math.min(28, Math.floor(2 + noiseSeed * 18 + (signal - 50) / 6)));
 
   const area = input.location_context?.area_label;
