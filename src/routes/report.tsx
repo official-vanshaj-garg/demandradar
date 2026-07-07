@@ -46,6 +46,15 @@ function ReportPage() {
   const [running, setRunning] = useState(false);
   const [card, setCard] = useState<ClassifyOutput | null>(null);
   const [submitted, setSubmitted] = useState<DemandReport | null>(null);
+  const [locationLock, setLocationLock] = useState<{
+    latitude: number;
+    longitude: number;
+    accuracy_meters?: number;
+  } | null>(null);
+  const [locationStatus, setLocationStatus] = useState<"idle" | "locating" | "locked" | "failed">(
+    "idle",
+  );
+  const [locationMessage, setLocationMessage] = useState<string | null>(null);
 
   const zone = useMemo(() => (zoneKey ? BLR_ZONES.find((z) => z.key === zoneKey) ?? null : null), [zoneKey]);
 
@@ -63,6 +72,47 @@ function ReportPage() {
     for (let i = 0; i < seed.length; i++) h = (h * 31 + seed.charCodeAt(i)) >>> 0;
     const r = ((h % 10000) / 10000) - 0.5; // -0.5..0.5
     return n + r * 0.018; // ~±1km
+  }
+
+  function requestLocationLock() {
+    if (!navigator.geolocation) {
+      setLocationStatus("failed");
+      setLocationMessage("Geolocation is not supported by your browser.");
+      return;
+    }
+    setLocationStatus("locating");
+    setLocationMessage(null);
+
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        const lat = pos.coords.latitude;
+        const lng = pos.coords.longitude;
+        const accuracy =
+          Number.isFinite(pos.coords.accuracy) && pos.coords.accuracy > 0
+            ? pos.coords.accuracy
+            : undefined;
+
+        if (Number.isFinite(lat) && Number.isFinite(lng)) {
+          setLocationLock({
+            latitude: lat,
+            longitude: lng,
+            accuracy_meters: accuracy,
+          });
+          setLocationStatus("locked");
+          setLocationMessage("Location locked. Please keep or adjust the area below.");
+        } else {
+          setLocationStatus("failed");
+          setLocationMessage("Invalid coordinates received.");
+        }
+      },
+      () => {
+        setLocationStatus("failed");
+        setLocationMessage(
+          "Could not access current location. You can continue by selecting an area manually.",
+        );
+      },
+      { enableHighAccuracy: true, timeout: 8000, maximumAge: 60000 },
+    );
   }
 
   async function runClassify() {
@@ -88,10 +138,19 @@ function ReportPage() {
       zone_key: zone.key,
       area_label: zone.label,
       location_text: locText,
-      // Apply ±~1km deterministic jitter so user pins don't stack on the centroid.
-      latitude: jitter(zone.lat, id, 1),
-      longitude: jitter(zone.lng, id, 7),
+      // Apply ±~1km deterministic jitter so manual pins don't stack on the centroid.
+      latitude: locationLock?.latitude ?? jitter(zone.lat, id, 1),
+      longitude: locationLock?.longitude ?? jitter(zone.lng, id, 7),
+      accuracy_meters: locationLock?.accuracy_meters,
     });
+    if (
+      loc.latitude == null ||
+      loc.longitude == null ||
+      !Number.isFinite(loc.latitude) ||
+      !Number.isFinite(loc.longitude)
+    ) {
+      return;
+    }
     // IMPORTANT: spread `card` FIRST, then location fields LAST so the AI
     // output can never overwrite area_label / location_text / lat / lng.
     const report: DemandReport = {
@@ -160,6 +219,28 @@ function ReportPage() {
             <div>
               <h2 className="font-display text-xl font-semibold">2. Where in Bengaluru?</h2>
               <p className="mt-1 text-sm text-muted-foreground">Coordinates are rounded to ~110m for privacy.</p>
+              <div className="mt-4 flex flex-wrap items-center gap-2">
+                <button
+                  type="button"
+                  onClick={requestLocationLock}
+                  disabled={locationStatus === "locating"}
+                  className="inline-flex items-center gap-2 rounded-md border border-border px-3 py-1.5 text-xs text-muted-foreground hover:border-primary/40 hover:text-primary disabled:opacity-50"
+                >
+                  {locationStatus === "locating" ? (
+                    <Loader2 className="h-3 w-3 animate-spin" />
+                  ) : (
+                    <MapPin className="h-3 w-3" />
+                  )}
+                  Use my current location
+                </button>
+                {locationMessage && (
+                  <span
+                    className={"text-xs " + (locationStatus === "failed" ? "text-destructive" : "text-primary")}
+                  >
+                    {locationMessage}
+                  </span>
+                )}
+              </div>
               <div className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-3">
                 {BLR_ZONES.map((z) => (
                   <button
