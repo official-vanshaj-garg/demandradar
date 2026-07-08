@@ -13,6 +13,8 @@ export interface DemandMapMarker {
   demand: DemandReport;
   x: number;
   y: number;
+  lat: number;
+  lng: number;
   radius: number;
   color: string;
   categoryLabel: string;
@@ -26,6 +28,8 @@ export interface DemandMapHotspot {
   areaLabel: string;
   x: number;
   y: number;
+  lat: number;
+  lng: number;
   signalCount: number;
   radius: number;
 }
@@ -35,6 +39,8 @@ export interface DemandMapZoneLabel {
   label: string;
   x: number;
   y: number;
+  lat: number;
+  lng: number;
 }
 
 export interface DemandMapCategoryCount {

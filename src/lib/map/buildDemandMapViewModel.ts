@@ -35,6 +35,8 @@ export function buildDemandMapViewModel(
       demand: d,
       x: p.x,
       y: p.y,
+      lat: d.latitude,
+      lng: d.longitude,
       radius: 1.1 + (d.signal_strength / 100) * 1.3,
       color: meta.color,
       categoryLabel: meta.label,
@@ -56,6 +58,8 @@ export function buildDemandMapViewModel(
         areaLabel: z.label,
         x: z.x,
         y: z.y,
+        lat: z.lat,
+        lng: z.lng,
         signalCount,
         radius: Math.min(18, 6 + signalCount * 1.6),
       },
@@ -67,6 +71,8 @@ export function buildDemandMapViewModel(
     label: z.label,
     x: z.x,
     y: z.y,
+    lat: z.lat,
+    lng: z.lng,
   }));
 
   const categoryCounts = (
