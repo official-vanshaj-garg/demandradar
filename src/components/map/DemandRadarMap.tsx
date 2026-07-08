@@ -1,6 +1,6 @@
 import type { DemandReport } from "@/domain/demand";
 import type { DemandMapViewModel } from "@/lib/map";
-import { SvgDemandMapRenderer } from "@/components/map/renderers";
+import { DemandMapRendererBoundary } from "@/components/map/renderers";
 
 interface Props {
   viewModel: DemandMapViewModel;
@@ -12,7 +12,7 @@ const noopSelectDemand = () => {};
 export function DemandRadarMap({ viewModel, onSelectDemand }: Props) {
   return (
     <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl border border-border bg-[oklch(0.14_0.025_250)]">
-      <SvgDemandMapRenderer
+      <DemandMapRendererBoundary
         viewModel={viewModel}
         onSelectDemand={onSelectDemand ?? noopSelectDemand}
       />

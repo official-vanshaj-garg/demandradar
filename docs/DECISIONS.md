@@ -56,3 +56,11 @@ Reason:
 - Installing Bun is a smaller change than migrating to npm.
 - The local dev server works with bun run dev.
 - Avoiding package-manager migration keeps Layer 1 focused and reduces unnecessary risk before de-Lovable extraction.
+
+## Decision 008 — Map provider config stays app-owned
+
+The active map renderer remains the SVG renderer.
+
+The provider config exists only to protect a future Mappls integration from leaking into routes, domain logic, or the SVG renderer. Mappls SDK, key, and script loading are intentionally deferred to a later provider-backed renderer layer.
+
+Missing, empty, invalid, or unsupported provider config falls back to SVG.
