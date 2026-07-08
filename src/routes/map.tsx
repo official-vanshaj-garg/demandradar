@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { useDemands } from "@/lib/data/store";
+import { buildDemandMapViewModel } from "@/lib/map";
 import { CATEGORY_META, type DemandCategory, type DemandReport } from "@/domain/demand";
 import { DemandRadarMap } from "@/components/map/DemandRadarMap";
 import { DemandCardDrawer } from "@/components/demand/DemandCardDrawer";
@@ -26,11 +27,10 @@ function MapPage() {
   const [minUrgency, setMinUrgency] = useState(1);
   const [open, setOpen] = useState<DemandReport | null>(null);
 
-  const filtered = useMemo(
-    () => all.filter((d) => (cat === "all" || d.category === cat) && d.urgency >= minUrgency),
+  const mapViewModel = useMemo(
+    () => buildDemandMapViewModel(all, { category: cat, minUrgency }),
     [all, cat, minUrgency],
   );
-  const sidebar = useMemo(() => filtered.slice(0, 30), [filtered]);
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6">
@@ -43,7 +43,9 @@ function MapPage() {
             Bengaluru demand grid
           </h1>
           <p className="mt-1 text-sm text-muted-foreground">
-            {ready ? `${filtered.length} of ${all.length} signals` : "Loading signals…"}
+            {ready
+              ? `${mapViewModel.filteredCount} of ${mapViewModel.allCount} signals`
+              : "Loading signals…"}
           </p>
         </div>
         <div className="flex items-center gap-3">
@@ -66,22 +68,24 @@ function MapPage() {
 
       <div className="mb-4 -mx-1 flex gap-1.5 overflow-x-auto px-1 pb-2">
         <Chip active={cat === "all"} onClick={() => setCat("all")} color="oklch(0.82 0.16 195)">
-          All ({all.length})
+          All ({mapViewModel.allCount})
         </Chip>
-        {(Object.keys(CATEGORY_META) as DemandCategory[]).map((c) => {
-          const m = CATEGORY_META[c];
-          const n = all.filter((d) => d.category === c).length;
-          if (n === 0) return null;
+        {mapViewModel.categoryCounts.map((categoryCount) => {
           return (
-            <Chip key={c} active={cat === c} onClick={() => setCat(c)} color={m.color}>
-              {m.label} ({n})
+            <Chip
+              key={categoryCount.category}
+              active={cat === categoryCount.category}
+              onClick={() => setCat(categoryCount.category)}
+              color={categoryCount.color}
+            >
+              {categoryCount.label} ({categoryCount.count})
             </Chip>
           );
         })}
       </div>
 
       <div className="grid gap-6 lg:grid-cols-[1.5fr_1fr]">
-        <DemandRadarMap demands={filtered} selectedCategory={cat} onSelectDemand={setOpen} />
+        <DemandRadarMap viewModel={mapViewModel} onSelectDemand={setOpen} />
 
         <aside className="rounded-2xl border border-border bg-glass glass max-h-[640px] overflow-y-auto">
           <div className="sticky top-0 z-10 border-b border-border bg-background/80 px-4 py-3 backdrop-blur">
@@ -90,7 +94,7 @@ function MapPage() {
             </div>
           </div>
           <ul className="divide-y divide-border">
-            {sidebar.map((d) => {
+            {mapViewModel.sidebarDemands.map((d) => {
               const m = CATEGORY_META[d.category];
               return (
                 <li key={d.id}>
@@ -118,7 +122,7 @@ function MapPage() {
                 </li>
               );
             })}
-            {sidebar.length === 0 && (
+            {mapViewModel.sidebarDemands.length === 0 && (
               <li className="p-6 text-center text-sm text-muted-foreground">
                 No signals match these filters.
               </li>

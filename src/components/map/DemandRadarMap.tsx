@@ -1,32 +1,15 @@
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import type { DemandReport } from "@/domain/demand";
-import { CATEGORY_META, type DemandCategory } from "@/domain/demand";
-import { BLR_ZONES, projectToCanvas } from "@/lib/geo/bengaluru";
+import type { DemandMapViewModel } from "@/lib/map";
 
 interface Props {
-  demands: DemandReport[];
-  selectedCategory?: DemandCategory | "all";
+  viewModel: DemandMapViewModel;
   onSelectDemand?: (d: DemandReport) => void;
 }
 
-export function DemandRadarMap({ demands, selectedCategory = "all", onSelectDemand }: Props) {
+export function DemandRadarMap({ viewModel, onSelectDemand }: Props) {
   const [hover, setHover] = useState<string | null>(null);
-
-  const points = useMemo(() => {
-    return demands
-      .filter((d) => selectedCategory === "all" || d.category === selectedCategory)
-      .map((d) => {
-        const p = projectToCanvas(d.latitude, d.longitude);
-        return { d, x: p.x, y: p.y };
-      });
-  }, [demands, selectedCategory]);
-
-  // density per zone (for hotspot blobs)
-  const zoneDensity = useMemo(() => {
-    const m = new Map<string, number>();
-    points.forEach((p) => m.set(p.d.area_label, (m.get(p.d.area_label) || 0) + 1));
-    return m;
-  }, [points]);
+  const { hotspots, markers, zoneLabels } = viewModel;
 
   return (
     <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl border border-border bg-[oklch(0.14_0.025_250)]">
@@ -73,57 +56,58 @@ export function DemandRadarMap({ demands, selectedCategory = "all", onSelectDema
         ))}
 
         {/* zone density blobs */}
-        {BLR_ZONES.map((z) => {
-          const n = zoneDensity.get(z.label) || 0;
-          if (n === 0) return null;
-          const r = Math.min(18, 6 + n * 1.6);
-          return <circle key={z.key} cx={z.x} cy={z.y} r={r} fill="url(#hot-blob)" />;
-        })}
+        {hotspots.map((hotspot) => (
+          <circle
+            key={hotspot.zoneKey}
+            cx={hotspot.x}
+            cy={hotspot.y}
+            r={hotspot.radius}
+            fill="url(#hot-blob)"
+          />
+        ))}
 
         {/* zone labels */}
-        {BLR_ZONES.map((z) => (
-          <g key={`lbl-${z.key}`}>
-            <circle cx={z.x} cy={z.y} r="0.7" fill="oklch(0.97 0.01 240 / 0.5)" />
+        {zoneLabels.map((zone) => (
+          <g key={`lbl-${zone.zoneKey}`}>
+            <circle cx={zone.x} cy={zone.y} r="0.7" fill="oklch(0.97 0.01 240 / 0.5)" />
             <text
-              x={z.x + 1.5}
-              y={z.y - 1.5}
+              x={zone.x + 1.5}
+              y={zone.y - 1.5}
               fontSize="2.2"
               fill="oklch(0.85 0.02 240 / 0.6)"
               fontFamily="ui-monospace"
             >
-              {z.label}
+              {zone.label}
             </text>
           </g>
         ))}
 
         {/* signal markers */}
-        {points.map((p) => {
-          const meta = CATEGORY_META[p.d.category];
-          const active = hover === p.d.id;
-          const r = 1.1 + (p.d.signal_strength / 100) * 1.3;
+        {markers.map((marker) => {
+          const active = hover === marker.id;
           return (
             <g
-              key={p.d.id}
+              key={marker.id}
               className="cursor-pointer"
-              onMouseEnter={() => setHover(p.d.id)}
+              onMouseEnter={() => setHover(marker.id)}
               onMouseLeave={() => setHover(null)}
-              onClick={() => onSelectDemand?.(p.d)}
+              onClick={() => onSelectDemand?.(marker.demand)}
             >
               <circle
-                cx={p.x}
-                cy={p.y}
-                r={r * 2.4}
-                fill={meta.color}
+                cx={marker.x}
+                cy={marker.y}
+                r={marker.radius * 2.4}
+                fill={marker.color}
                 opacity={active ? 0.25 : 0.08}
               />
               <circle
-                cx={p.x}
-                cy={p.y}
-                r={r}
-                fill={meta.color}
+                cx={marker.x}
+                cy={marker.y}
+                r={marker.radius}
+                fill={marker.color}
                 stroke="oklch(0 0 0 / 0.4)"
                 strokeWidth="0.15"
-                style={{ filter: "drop-shadow(0 0 1px currentColor)", color: meta.color }}
+                style={{ filter: "drop-shadow(0 0 1px currentColor)", color: marker.color }}
               />
             </g>
           );
@@ -138,23 +122,22 @@ export function DemandRadarMap({ demands, selectedCategory = "all", onSelectDema
       {/* hover tooltip */}
       {hover &&
         (() => {
-          const p = points.find((x) => x.d.id === hover);
-          if (!p) return null;
-          const meta = CATEGORY_META[p.d.category];
+          const marker = markers.find((x) => x.id === hover);
+          if (!marker) return null;
           return (
             <div
               className="pointer-events-none absolute z-10 max-w-[220px] -translate-x-1/2 -translate-y-full rounded-md border border-border bg-background/95 p-2 text-xs shadow-elevated"
-              style={{ left: `${p.x}%`, top: `${p.y}%`, marginTop: -8 }}
+              style={{ left: `${marker.x}%`, top: `${marker.y}%`, marginTop: -8 }}
             >
               <div
                 className="font-mono text-[10px] uppercase tracking-widest"
-                style={{ color: meta.color }}
+                style={{ color: marker.color }}
               >
-                {meta.label}
+                {marker.categoryLabel}
               </div>
-              <div className="mt-0.5 line-clamp-2 font-medium">{p.d.title}</div>
+              <div className="mt-0.5 line-clamp-2 font-medium">{marker.title}</div>
               <div className="mt-0.5 text-[10px] text-muted-foreground">
-                {p.d.area_label} · signal {p.d.signal_strength}
+                {marker.areaLabel} · signal {marker.signalStrength}
               </div>
             </div>
           );
@@ -166,7 +149,7 @@ export function DemandRadarMap({ demands, selectedCategory = "all", onSelectDema
         BLR · live demand grid
       </div>
       <div className="absolute bottom-3 right-3 rounded-md border border-border bg-background/60 px-2 py-1 font-mono text-[10px] uppercase tracking-widest backdrop-blur">
-        {points.length} signals
+        {markers.length} signals
       </div>
     </div>
   );
