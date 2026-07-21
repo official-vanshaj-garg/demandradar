@@ -1,4 +1,4 @@
-﻿# DemandRadar Engineering Decisions
+# DemandRadar Engineering Decisions
 
 ## Decision 001 — Startup-first product
 
@@ -61,6 +61,13 @@ Reason:
 
 The active map renderer remains the SVG renderer.
 
-The provider config exists only to protect a future Mappls integration from leaking into routes, domain logic, or the SVG renderer. Mappls SDK, key, and script loading are intentionally deferred to a later provider-backed renderer layer.
-
+The provider config exists only to protect a future Mappls integration from leaking into routes, domain logic, or the SVG renderer.
 Missing, empty, invalid, or unsupported provider config falls back to SVG.
+
+**Note on Mappls SDK Prototype:**
+
+- Mappls renderer is placed securely behind the provider config boundary.
+- SVG remains the strict fallback.
+- The frontend will only load a domain-restricted browser-safe Mappls public key/token.
+- Mappls `client_secret` must never be placed in frontend environment files.
+- Backend token generation is deferred until a backend exists.
