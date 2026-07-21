@@ -21,3 +21,10 @@ export function getConfiguredMapProvider(): MapProviderType {
 
   return DEFAULT_MAP_PROVIDER;
 }
+
+export function getMapplsMapKey(): string | undefined {
+  const key = import.meta.env.VITE_MAPPLS_MAP_KEY;
+  if (typeof key !== "string") return undefined;
+  const trimmed = key.trim();
+  return trimmed === "" ? undefined : trimmed;
+}
