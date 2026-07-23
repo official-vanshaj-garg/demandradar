@@ -64,10 +64,10 @@ The active map renderer remains the SVG renderer.
 The provider config exists only to protect a future Mappls integration from leaking into routes, domain logic, or the SVG renderer.
 Missing, empty, invalid, or unsupported provider config falls back to SVG.
 
-**Note on Mappls SDK Prototype:**
+**Mappls SDK loader:**
 
-- Mappls renderer is placed securely behind the provider config boundary.
-- SVG remains the strict fallback.
-- The frontend will only load a domain-restricted browser-safe Mappls public key/token.
-- Mappls `client_secret` must never be placed in frontend environment files.
-- Backend token generation is deferred until a backend exists.
+- Uses the official static-key `access_token` mechanism (`sdk.mappls.com`).
+- The browser static key (`VITE_MAPPLS_STATIC_KEY`) must be domain-restricted in the Mappls console.
+- Frontend `client_secret` is prohibited.
+- SVG remains the strict fallback for all failure paths.
+- Real Mappls map rendering has not yet been verified with a valid key.
