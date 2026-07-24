@@ -1,5 +1,4 @@
-import type { DemandReport } from "@/domain/demand";
-import { ACTOR_LABEL, CATEGORY_META } from "@/domain/demand";
+import type { DemandCardViewModel } from "@/lib/demand";
 import {
   X,
   MapPin,
@@ -13,14 +12,14 @@ import {
 import { ConfidenceBar, ImpactPriorityTag, SignalStrengthMeter, UrgencyChip } from "./Indicators";
 
 export function DemandCardDrawer({
-  demand,
+  viewModel,
   onClose,
 }: {
-  demand: DemandReport | null;
+  viewModel: DemandCardViewModel | null;
   onClose: () => void;
 }) {
-  if (!demand) return null;
-  const meta = CATEGORY_META[demand.category];
+  if (!viewModel) return null;
+  const meta = viewModel.category;
   return (
     <div className="fixed inset-0 z-50">
       <div
@@ -34,7 +33,7 @@ export function DemandCardDrawer({
               className="h-2 w-2 rounded-full anim-signal-blink"
               style={{ background: meta.color }}
             />
-            Demand Card · {demand.id.slice(0, 8)}
+            Demand Card · {viewModel.displayId}
           </div>
           <button
             onClick={onClose}
@@ -52,45 +51,41 @@ export function DemandCardDrawer({
                 className="text-[11px] font-mono uppercase tracking-[0.18em]"
                 style={{ color: meta.color }}
               >
-                {meta.label} · {demand.sub_category}
+                {meta.label} · {viewModel.subCategory}
               </div>
               <h2 className="mt-2 font-display text-2xl font-semibold leading-tight">
-                {demand.title}
+                {viewModel.title}
               </h2>
             </div>
-            <SignalStrengthMeter value={demand.signal_strength} size={84} />
+            <SignalStrengthMeter value={viewModel.signalStrength} size={84} />
           </div>
 
           <div className="mt-5 flex flex-wrap items-center gap-2">
-            <UrgencyChip value={demand.urgency} />
-            <ImpactPriorityTag value={demand.impact_priority} />
+            <UrgencyChip value={viewModel.urgency} />
+            <ImpactPriorityTag value={viewModel.impactPriority} />
             <span className="inline-flex items-center gap-1 rounded-md bg-muted/40 px-2 py-0.5 text-[11px] text-muted-foreground">
               <ShieldCheck className="h-3 w-3" />
-              Privacy: {demand.privacy_status}
+              Privacy: {viewModel.privacyStatus}
             </span>
             <span className="inline-flex items-center gap-1 rounded-md bg-muted/40 px-2 py-0.5 text-[11px] text-muted-foreground">
               <Hash className="h-3 w-3" />
-              {demand.similar_reports_count} similar nearby
+              {viewModel.similarReportsCount} similar nearby
             </span>
           </div>
 
           <div className="mt-6 grid gap-4 rounded-xl border border-border bg-surface/60 p-4">
-            <Field label="Need summary">{demand.need_summary}</Field>
-            <ConfidenceBar value={demand.confidence_score} />
+            <Field label="Need summary">{viewModel.needSummary}</Field>
+            <ConfidenceBar value={viewModel.confidenceScore} />
           </div>
 
           <div className="mt-4 grid gap-3 sm:grid-cols-2">
-            <Stat
-              icon={Users}
-              label="Affected group"
-              value={demand.affected_group.replace("_", " ")}
-            />
-            <Stat icon={MapPin} label="Location" value={demand.location_text} />
-            <Stat icon={Activity} label="Status" value={demand.status} />
+            <Stat icon={Users} label="Affected group" value={viewModel.affectedGroupLabel} />
+            <Stat icon={MapPin} label="Location" value={viewModel.locationText} />
+            <Stat icon={Activity} label="Status" value={viewModel.status} />
             <Stat
               icon={Lightbulb}
               label="Recommended actor"
-              value={ACTOR_LABEL[demand.recommended_actor]}
+              value={viewModel.recommendedActorLabel}
             />
           </div>
 
@@ -98,28 +93,28 @@ export function DemandCardDrawer({
             <div className="text-[11px] font-mono uppercase tracking-[0.18em] text-primary">
               Suggested action
             </div>
-            <p className="mt-1 text-sm">{demand.suggested_action}</p>
+            <p className="mt-1 text-sm">{viewModel.suggestedAction}</p>
           </div>
 
           <div className="mt-5 rounded-xl border border-border bg-surface/40 p-4">
             <div className="text-[11px] font-mono uppercase tracking-[0.18em] text-muted-foreground">
               Original report
             </div>
-            <p className="mt-1 text-sm italic text-muted-foreground">"{demand.raw_text}"</p>
+            <p className="mt-1 text-sm italic text-muted-foreground">"{viewModel.rawText}"</p>
           </div>
 
           <div className="mt-6 grid grid-cols-3 gap-2 font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
             <div className="rounded-md border border-border bg-muted/20 p-2">
               <div>lat</div>
-              <div className="mt-0.5 text-foreground">{demand.latitude.toFixed(3)}</div>
+              <div className="mt-0.5 text-foreground">{viewModel.latitudeText}</div>
             </div>
             <div className="rounded-md border border-border bg-muted/20 p-2">
               <div>lng</div>
-              <div className="mt-0.5 text-foreground">{demand.longitude.toFixed(3)}</div>
+              <div className="mt-0.5 text-foreground">{viewModel.longitudeText}</div>
             </div>
             <div className="rounded-md border border-border bg-muted/20 p-2">
               <div>area</div>
-              <div className="mt-0.5 text-foreground">{demand.area_label}</div>
+              <div className="mt-0.5 text-foreground">{viewModel.areaLabel}</div>
             </div>
           </div>
         </div>

@@ -71,3 +71,9 @@ Missing, empty, invalid, or unsupported provider config falls back to SVG.
 - Frontend `client_secret` is prohibited.
 - SVG remains the strict fallback for all failure paths.
 - Real Mappls map rendering has not yet been verified with a valid key.
+
+## Decision 009 — Demand card presentation is app-owned
+
+DemandCard and DemandCardDrawer render from a pure DemandCardViewModel instead of shaping display text directly from DemandReport in JSX.
+
+The ViewModel centralizes card-only presentation details such as display IDs, category metadata, actor labels, affected-group labels, and coordinate text. Interaction state, store methods, analytics, map data, and domain DemandCard remain outside this presentation boundary.
