@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { useDemands, toggleUpvote } from "@/lib/data/store";
+import { buildDemandCardViewModel, type DemandCardViewModel } from "@/lib/demand";
 import {
   CATEGORY_META,
   PRIORITY_RANK,
@@ -29,7 +30,7 @@ export const Route = createFileRoute("/dashboard")({
 
 function Dashboard() {
   const { all, upvotes, ready } = useDemands();
-  const [open, setOpen] = useState<DemandReport | null>(null);
+  const [open, setOpen] = useState<DemandCardViewModel | null>(null);
   const [sort, setSort] = useState<"recent" | "signal" | "urgent">("signal");
 
   const stats = useMemo(() => {
@@ -60,6 +61,8 @@ function Dashboard() {
       );
     return arr.slice(0, 9);
   }, [all, sort]);
+
+  const cardViewModels = useMemo(() => sorted.map(buildDemandCardViewModel), [sorted]);
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6">
@@ -199,19 +202,19 @@ function Dashboard() {
           </div>
         </div>
         <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-          {sorted.map((d) => (
+          {cardViewModels.map((card) => (
             <DemandCard
-              key={d.id}
-              d={d}
-              onOpen={setOpen}
+              key={card.id}
+              viewModel={card}
+              onOpen={() => setOpen(card)}
               onUpvote={(id) => toggleUpvote(id)}
-              upvoted={!!upvotes[d.id]}
+              upvoted={!!upvotes[card.id]}
             />
           ))}
         </div>
       </div>
 
-      <DemandCardDrawer demand={open} onClose={() => setOpen(null)} />
+      <DemandCardDrawer viewModel={open} onClose={() => setOpen(null)} />
     </div>
   );
 }

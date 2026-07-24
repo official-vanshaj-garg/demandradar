@@ -1,8 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { useDemands } from "@/lib/data/store";
+import { buildDemandCardViewModel, type DemandCardViewModel } from "@/lib/demand";
 import { buildDemandMapViewModel } from "@/lib/map";
-import { CATEGORY_META, type DemandCategory, type DemandReport } from "@/domain/demand";
+import { CATEGORY_META, type DemandCategory } from "@/domain/demand";
 import { DemandRadarMap } from "@/components/map/DemandRadarMap";
 import { DemandCardDrawer } from "@/components/demand/DemandCardDrawer";
 import { Filter } from "lucide-react";
@@ -25,7 +26,7 @@ function MapPage() {
   const { all, ready } = useDemands();
   const [cat, setCat] = useState<DemandCategory | "all">("all");
   const [minUrgency, setMinUrgency] = useState(1);
-  const [open, setOpen] = useState<DemandReport | null>(null);
+  const [open, setOpen] = useState<DemandCardViewModel | null>(null);
 
   const mapViewModel = useMemo(
     () => buildDemandMapViewModel(all, { category: cat, minUrgency }),
@@ -85,7 +86,10 @@ function MapPage() {
       </div>
 
       <div className="grid gap-6 lg:grid-cols-[1.5fr_1fr]">
-        <DemandRadarMap viewModel={mapViewModel} onSelectDemand={setOpen} />
+        <DemandRadarMap
+          viewModel={mapViewModel}
+          onSelectDemand={(demand) => setOpen(buildDemandCardViewModel(demand))}
+        />
 
         <aside className="rounded-2xl border border-border bg-glass glass max-h-[640px] overflow-y-auto">
           <div className="sticky top-0 z-10 border-b border-border bg-background/80 px-4 py-3 backdrop-blur">
@@ -99,7 +103,7 @@ function MapPage() {
               return (
                 <li key={d.id}>
                   <button
-                    onClick={() => setOpen(d)}
+                    onClick={() => setOpen(buildDemandCardViewModel(d))}
                     className="block w-full px-4 py-3 text-left transition hover:bg-muted/30"
                   >
                     <div className="flex items-center gap-2">
@@ -131,7 +135,7 @@ function MapPage() {
         </aside>
       </div>
 
-      <DemandCardDrawer demand={open} onClose={() => setOpen(null)} />
+      <DemandCardDrawer viewModel={open} onClose={() => setOpen(null)} />
     </div>
   );
 }
