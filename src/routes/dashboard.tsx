@@ -1,14 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { useDemands, toggleUpvote } from "@/lib/data/store";
+import { buildDashboardViewModel, type DashboardViewModel } from "@/lib/analytics";
 import { buildDemandCardViewModel, type DemandCardViewModel } from "@/lib/demand";
-import {
-  CATEGORY_META,
-  PRIORITY_RANK,
-  type DemandCategory,
-  type DemandReport,
-} from "@/domain/demand";
-import { BLR_ZONES } from "@/lib/geo/bengaluru";
 import { DemandCard } from "@/components/demand/DemandCard";
 import { DemandCardDrawer } from "@/components/demand/DemandCardDrawer";
 import { LiveSignalFeed } from "@/components/feed/LiveSignalFeed";
@@ -33,36 +27,20 @@ function Dashboard() {
   const [open, setOpen] = useState<DemandCardViewModel | null>(null);
   const [sort, setSort] = useState<"recent" | "signal" | "urgent">("signal");
 
-  const stats = useMemo(() => {
-    const total = all.length;
-    const avgSignal = total
-      ? Math.round(all.reduce((s, d) => s + d.signal_strength, 0) / total)
-      : 0;
-    const catCount = new Map<DemandCategory, number>();
-    const areaCount = new Map<string, number>();
-    all.forEach((d) => {
-      catCount.set(d.category, (catCount.get(d.category) || 0) + 1);
-      areaCount.set(d.area_label, (areaCount.get(d.area_label) || 0) + 1);
-    });
-    const topCat = [...catCount.entries()].sort((a, b) => b[1] - a[1])[0];
-    const hotspot = [...areaCount.entries()].sort((a, b) => b[1] - a[1])[0];
-    return { total, avgSignal, topCat, hotspot, catCount, areaCount };
-  }, [all]);
+  const dashboardViewModel = useMemo(
+    () => buildDashboardViewModel(all, { cardSort: sort }),
+    [all, sort],
+  );
 
-  const sorted = useMemo(() => {
-    const arr = [...all];
-    if (sort === "recent") arr.sort((a, b) => +new Date(b.created_at) - +new Date(a.created_at));
-    else if (sort === "signal") arr.sort((a, b) => b.signal_strength - a.signal_strength);
-    else
-      arr.sort(
-        (a, b) =>
-          PRIORITY_RANK[b.impact_priority] - PRIORITY_RANK[a.impact_priority] ||
-          b.urgency - a.urgency,
-      );
-    return arr.slice(0, 9);
-  }, [all, sort]);
-
-  const cardViewModels = useMemo(() => sorted.map(buildDemandCardViewModel), [sorted]);
+  const reportsById = useMemo(() => new Map(all.map((d) => [d.id, d])), [all]);
+  const cardViewModels = useMemo(
+    () =>
+      dashboardViewModel.sortedDemandIds.flatMap((id) => {
+        const report = reportsById.get(id);
+        return report ? [buildDemandCardViewModel(report)] : [];
+      }),
+    [dashboardViewModel.sortedDemandIds, reportsById],
+  );
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6">
@@ -80,27 +58,31 @@ function Dashboard() {
         <Kpi
           icon={Activity}
           label="Total demand signals"
-          value={stats.total.toString()}
+          value={dashboardViewModel.totalSignals.toString()}
           hint="across pilot zones"
         />
         <Kpi
           icon={TrendingUp}
           label="Avg signal strength"
-          value={`${stats.avgSignal}`}
+          value={`${dashboardViewModel.averageSignalStrength}`}
           hint="0–100"
         />
         <Kpi
           icon={Layers}
           label="Top unmet category"
-          value={stats.topCat ? CATEGORY_META[stats.topCat[0]].label : "—"}
-          hint={stats.topCat ? `${stats.topCat[1]} signals` : ""}
-          accent={stats.topCat ? CATEGORY_META[stats.topCat[0]].color : undefined}
+          value={dashboardViewModel.topCategory ? dashboardViewModel.topCategory.label : "—"}
+          hint={
+            dashboardViewModel.topCategory ? `${dashboardViewModel.topCategory.count} signals` : ""
+          }
+          accent={dashboardViewModel.topCategory?.color}
         />
         <Kpi
           icon={MapPin}
           label="Hotspot area"
-          value={stats.hotspot?.[0] ?? "—"}
-          hint={stats.hotspot ? `${stats.hotspot[1]} signals` : ""}
+          value={dashboardViewModel.hotspotArea?.area ?? "—"}
+          hint={
+            dashboardViewModel.hotspotArea ? `${dashboardViewModel.hotspotArea.count} signals` : ""
+          }
         />
       </div>
 
@@ -115,7 +97,7 @@ function Dashboard() {
               heat = volume
             </span>
           </div>
-          <DemandMatrix all={all} />
+          <DemandMatrix matrix={dashboardViewModel.demandMatrix} />
         </div>
 
         <div className="rounded-2xl border border-border bg-glass p-5 glass">
@@ -123,26 +105,21 @@ function Dashboard() {
             Area leaderboard
           </h3>
           <ul className="mt-3 space-y-2">
-            {[...stats.areaCount.entries()]
-              .sort((a, b) => b[1] - a[1])
-              .map(([area, n], i) => {
-                const max = Math.max(...stats.areaCount.values());
-                return (
-                  <li key={area} className="flex items-center gap-3">
-                    <span className="w-5 font-mono text-[10px] text-muted-foreground">
-                      #{i + 1}
-                    </span>
-                    <span className="w-32 truncate text-sm">{area}</span>
-                    <div className="relative h-2 flex-1 overflow-hidden rounded-full bg-muted">
-                      <div
-                        className="absolute inset-y-0 left-0 rounded-full bg-gradient-to-r from-secondary to-primary"
-                        style={{ width: `${(n / max) * 100}%` }}
-                      />
-                    </div>
-                    <span className="font-mono text-xs text-muted-foreground">{n}</span>
-                  </li>
-                );
-              })}
+            {dashboardViewModel.areaLeaderboard.map((area) => (
+              <li key={area.area} className="flex items-center gap-3">
+                <span className="w-5 font-mono text-[10px] text-muted-foreground">
+                  #{area.rank}
+                </span>
+                <span className="w-32 truncate text-sm">{area.area}</span>
+                <div className="relative h-2 flex-1 overflow-hidden rounded-full bg-muted">
+                  <div
+                    className="absolute inset-y-0 left-0 rounded-full bg-gradient-to-r from-secondary to-primary"
+                    style={{ width: `${area.widthPercent}%` }}
+                  />
+                </div>
+                <span className="font-mono text-xs text-muted-foreground">{area.count}</span>
+              </li>
+            ))}
           </ul>
         </div>
       </div>
@@ -154,25 +131,19 @@ function Dashboard() {
             Category distribution
           </h3>
           <div className="mt-4 space-y-2">
-            {[...stats.catCount.entries()]
-              .sort((a, b) => b[1] - a[1])
-              .map(([c, n]) => {
-                const m = CATEGORY_META[c];
-                const max = Math.max(...stats.catCount.values());
-                return (
-                  <div key={c} className="flex items-center gap-3">
-                    <span className="h-2 w-2 rounded-full" style={{ background: m.color }} />
-                    <span className="w-40 truncate text-sm">{m.label}</span>
-                    <div className="relative h-2 flex-1 overflow-hidden rounded-full bg-muted">
-                      <div
-                        className="absolute inset-y-0 left-0 rounded-full"
-                        style={{ width: `${(n / max) * 100}%`, background: m.color }}
-                      />
-                    </div>
-                    <span className="font-mono text-xs text-muted-foreground">{n}</span>
-                  </div>
-                );
-              })}
+            {dashboardViewModel.categoryDistribution.map((category) => (
+              <div key={category.category} className="flex items-center gap-3">
+                <span className="h-2 w-2 rounded-full" style={{ background: category.color }} />
+                <span className="w-40 truncate text-sm">{category.label}</span>
+                <div className="relative h-2 flex-1 overflow-hidden rounded-full bg-muted">
+                  <div
+                    className="absolute inset-y-0 left-0 rounded-full"
+                    style={{ width: `${category.widthPercent}%`, background: category.color }}
+                  />
+                </div>
+                <span className="font-mono text-xs text-muted-foreground">{category.count}</span>
+              </div>
+            ))}
           </div>
         </div>
         <LiveSignalFeed limit={8} />
@@ -257,20 +228,7 @@ function Kpi({
   );
 }
 
-function DemandMatrix({ all }: { all: DemandReport[] }) {
-  const cats = (Object.keys(CATEGORY_META) as DemandCategory[]).filter((c) =>
-    all.some((d) => d.category === c),
-  );
-  const grid: Record<string, Record<string, number>> = {};
-  let max = 0;
-  BLR_ZONES.forEach((z) => {
-    grid[z.label] = {};
-    cats.forEach((c) => {
-      const n = all.filter((d) => d.area_label === z.label && d.category === c).length;
-      grid[z.label][c] = n;
-      if (n > max) max = n;
-    });
-  });
+function DemandMatrix({ matrix }: { matrix: DashboardViewModel["demandMatrix"] }) {
   return (
     <div className="overflow-x-auto">
       <table className="min-w-full text-xs">
@@ -279,37 +237,35 @@ function DemandMatrix({ all }: { all: DemandReport[] }) {
             <th className="sticky left-0 bg-glass p-1.5 text-left font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
               Area
             </th>
-            {cats.map((c) => (
+            {matrix.categories.map((category) => (
               <th
-                key={c}
+                key={category.category}
                 className="p-1.5 text-left font-mono text-[10px] uppercase tracking-widest"
-                style={{ color: CATEGORY_META[c].color }}
+                style={{ color: category.color }}
               >
-                {CATEGORY_META[c].label.split(" ")[0]}
+                {category.shortLabel}
               </th>
             ))}
           </tr>
         </thead>
         <tbody>
-          {BLR_ZONES.map((z) => (
-            <tr key={z.key}>
-              <td className="sticky left-0 bg-glass p-1.5 text-foreground">{z.label}</td>
-              {cats.map((c) => {
-                const n = grid[z.label][c];
-                const intensity = max ? n / max : 0;
+          {matrix.rows.map((row) => (
+            <tr key={row.zoneKey}>
+              <td className="sticky left-0 bg-glass p-1.5 text-foreground">{row.area}</td>
+              {row.cells.map((cell) => {
                 return (
-                  <td key={c} className="p-1">
+                  <td key={cell.category} className="p-1">
                     <div
                       className="flex h-7 w-full items-center justify-center rounded-md text-[11px]"
                       style={{
-                        background: n
-                          ? `color-mix(in oklch, ${CATEGORY_META[c].color} ${30 + intensity * 55}%, transparent)`
+                        background: cell.count
+                          ? `color-mix(in oklch, ${cell.color} ${cell.heatPercent}%, transparent)`
                           : "oklch(1 0 0 / 0.04)",
-                        color: n ? "oklch(0.15 0.02 250)" : "oklch(0.5 0.02 240)",
-                        fontWeight: n ? 600 : 400,
+                        color: cell.count ? "oklch(0.15 0.02 250)" : "oklch(0.5 0.02 240)",
+                        fontWeight: cell.count ? 600 : 400,
                       }}
                     >
-                      {n || "·"}
+                      {cell.count || "·"}
                     </div>
                   </td>
                 );

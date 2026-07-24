@@ -1,8 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo } from "react";
 import { useDemands } from "@/lib/data/store";
-import { ACTOR_LABEL, CATEGORY_META, PRIORITY_RANK, type DemandReport } from "@/domain/demand";
-import { BLR_ZONES } from "@/lib/geo/bengaluru";
+import { buildInsightsViewModel } from "@/lib/analytics";
 import { Lightbulb, Target, Users, Sparkles, ArrowRight, type LucideIcon } from "lucide-react";
 
 export const Route = createFileRoute("/insights")({
@@ -19,81 +18,10 @@ export const Route = createFileRoute("/insights")({
   component: Insights,
 });
 
-interface Cluster {
-  area: string;
-  category: keyof typeof CATEGORY_META;
-  count: number;
-  avgSignal: number;
-  worstPriority: string;
-  sample: DemandReport;
-}
-
 function Insights() {
   const { all } = useDemands();
 
-  const clusters = useMemo<Cluster[]>(() => {
-    const map = new Map<string, DemandReport[]>();
-    all.forEach((d) => {
-      const k = `${d.area_label}__${d.category}`;
-      const arr = map.get(k) || [];
-      arr.push(d);
-      map.set(k, arr);
-    });
-    const out: Cluster[] = [];
-    map.forEach((rows, k) => {
-      if (rows.length < 2) return;
-      const [area, category] = k.split("__") as [string, keyof typeof CATEGORY_META];
-      const avgSignal = Math.round(rows.reduce((s, d) => s + d.signal_strength, 0) / rows.length);
-      const worst = rows.sort(
-        (a, b) => PRIORITY_RANK[b.impact_priority] - PRIORITY_RANK[a.impact_priority],
-      )[0];
-      out.push({
-        area,
-        category,
-        count: rows.length,
-        avgSignal,
-        worstPriority: worst.impact_priority,
-        sample: worst,
-      });
-    });
-    return out.sort((a, b) => b.avgSignal * b.count - a.avgSignal * a.count).slice(0, 6);
-  }, [all]);
-
-  const actorBreakdown = useMemo(() => {
-    const m = new Map<string, number>();
-    all.forEach((d) => m.set(d.recommended_actor, (m.get(d.recommended_actor) || 0) + 1));
-    return [...m.entries()].sort((a, b) => b[1] - a[1]);
-  }, [all]);
-
-  const studentAreas = useMemo(() => {
-    const m = new Map<string, number>();
-    all
-      .filter((d) => d.affected_group === "students")
-      .forEach((d) => m.set(d.area_label, (m.get(d.area_label) || 0) + 1));
-    return [...m.entries()].sort((a, b) => b[1] - a[1]).slice(0, 5);
-  }, [all]);
-
-  const opportunities = useMemo(() => {
-    return clusters.slice(0, 4).map((c) => {
-      const score = Math.min(100, Math.round(c.avgSignal * 0.6 + c.count * 8));
-      return { ...c, score };
-    });
-  }, [clusters]);
-
-  const underservedZones = useMemo(() => {
-    const m = new Map<string, { areas: Set<string>; total: number }>();
-    BLR_ZONES.forEach((z) => m.set(z.label, { areas: new Set(), total: 0 }));
-    all.forEach((d) => {
-      const e = m.get(d.area_label);
-      if (!e) return;
-      e.areas.add(d.category);
-      e.total += 1;
-    });
-    return [...m.entries()]
-      .map(([area, v]) => ({ area, categories: v.areas.size, total: v.total }))
-      .sort((a, b) => b.categories - a.categories)
-      .slice(0, 5);
-  }, [all]);
+  const insightsViewModel = useMemo(() => buildInsightsViewModel(all), [all]);
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6">
@@ -111,8 +39,8 @@ function Insights() {
       <section className="mt-8">
         <SectionTitle icon={Sparkles}>Emerging clusters</SectionTitle>
         <div className="mt-4 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-          {clusters.map((c) => {
-            const m = CATEGORY_META[c.category];
+          {insightsViewModel.clusters.map((c) => {
+            const m = { label: c.categoryLabel, color: c.categoryColor };
             return (
               <div
                 key={`${c.area}-${c.category}`}
@@ -133,7 +61,7 @@ function Insights() {
                   {c.count} signals — avg strength {c.avgSignal}
                 </div>
                 <p className="mt-1 line-clamp-2 text-sm text-muted-foreground">
-                  "{c.sample.raw_text}"
+                  "{c.sampleRawText}"
                 </p>
                 <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-muted">
                   <div
@@ -144,7 +72,7 @@ function Insights() {
               </div>
             );
           })}
-          {clusters.length === 0 && (
+          {insightsViewModel.clusters.length === 0 && (
             <div className="text-sm text-muted-foreground">
               Not enough signals yet to form clusters.
             </div>
@@ -156,7 +84,7 @@ function Insights() {
       <section className="mt-12">
         <SectionTitle icon={Lightbulb}>Recommended actions</SectionTitle>
         <div className="mt-4 grid gap-3 md:grid-cols-2">
-          {clusters.slice(0, 6).map((c) => (
+          {insightsViewModel.recommendedActions.map((c) => (
             <div
               key={`act-${c.area}-${c.category}`}
               className="flex items-start gap-3 rounded-xl border border-primary/30 bg-primary/[0.04] p-4"
@@ -166,9 +94,9 @@ function Insights() {
               </div>
               <div className="min-w-0">
                 <div className="font-mono text-[10px] uppercase tracking-widest text-primary">
-                  {ACTOR_LABEL[c.sample.recommended_actor]}
+                  {c.sampleRecommendedActorLabel}
                 </div>
-                <div className="mt-0.5 text-sm font-medium">{c.sample.suggested_action}</div>
+                <div className="mt-0.5 text-sm font-medium">{c.sampleSuggestedAction}</div>
                 <div className="mt-1 text-xs text-muted-foreground">
                   {c.area} · {c.count} signals · avg {c.avgSignal} signal strength
                 </div>
@@ -182,20 +110,17 @@ function Insights() {
         <div className="rounded-2xl border border-border bg-glass p-5 glass">
           <SectionTitle icon={Users}>Actor breakdown</SectionTitle>
           <ul className="mt-4 space-y-2">
-            {actorBreakdown.map(([a, n]) => {
-              const max = Math.max(...actorBreakdown.map(([, v]) => v));
+            {insightsViewModel.actorBreakdown.map((actor) => {
               return (
-                <li key={a} className="flex items-center gap-3">
-                  <span className="w-44 truncate text-sm">
-                    {ACTOR_LABEL[a as keyof typeof ACTOR_LABEL] ?? a}
-                  </span>
+                <li key={actor.actor} className="flex items-center gap-3">
+                  <span className="w-44 truncate text-sm">{actor.label}</span>
                   <div className="relative h-2 flex-1 overflow-hidden rounded-full bg-muted">
                     <div
                       className="absolute inset-y-0 left-0 rounded-full bg-gradient-to-r from-secondary to-primary"
-                      style={{ width: `${(n / max) * 100}%` }}
+                      style={{ width: `${actor.widthPercent}%` }}
                     />
                   </div>
-                  <span className="font-mono text-xs text-muted-foreground">{n}</span>
+                  <span className="font-mono text-xs text-muted-foreground">{actor.count}</span>
                 </li>
               );
             })}
@@ -208,19 +133,21 @@ function Insights() {
             Where students are flagging the most unmet needs.
           </p>
           <ul className="mt-3 space-y-2">
-            {studentAreas.map(([a, n], i) => (
+            {insightsViewModel.studentAreas.map((area) => (
               <li
-                key={a}
+                key={area.area}
                 className="flex items-center justify-between rounded-md border border-border bg-surface/30 px-3 py-2 text-sm"
               >
                 <span>
-                  <span className="mr-2 font-mono text-[10px] text-muted-foreground">#{i + 1}</span>
-                  {a}
+                  <span className="mr-2 font-mono text-[10px] text-muted-foreground">
+                    #{area.rank}
+                  </span>
+                  {area.area}
                 </span>
-                <span className="font-mono text-xs text-primary">{n} signals</span>
+                <span className="font-mono text-xs text-primary">{area.count} signals</span>
               </li>
             ))}
-            {studentAreas.length === 0 && (
+            {insightsViewModel.studentAreas.length === 0 && (
               <li className="text-sm text-muted-foreground">No student signals yet.</li>
             )}
           </ul>
@@ -231,8 +158,8 @@ function Insights() {
       <section className="mt-12">
         <SectionTitle icon={Target}>Opportunity scorecards</SectionTitle>
         <div className="mt-4 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-          {opportunities.map((o) => {
-            const m = CATEGORY_META[o.category];
+          {insightsViewModel.opportunities.map((o) => {
+            const m = { label: o.categoryLabel, color: o.categoryColor };
             return (
               <div
                 key={`opp-${o.area}-${o.category}`}
@@ -264,7 +191,7 @@ function Insights() {
       <section className="mt-12">
         <SectionTitle icon={Sparkles}>Most underserved zones</SectionTitle>
         <div className="mt-4 grid gap-3 md:grid-cols-2 lg:grid-cols-3">
-          {underservedZones.map((u) => (
+          {insightsViewModel.underservedZones.map((u) => (
             <div key={u.area} className="rounded-xl border border-border bg-glass p-4 glass">
               <div className="font-display text-base font-semibold">{u.area}</div>
               <div className="mt-1 text-xs text-muted-foreground">
@@ -273,7 +200,7 @@ function Insights() {
               <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-muted">
                 <div
                   className="h-full rounded-full bg-gradient-to-r from-warm to-destructive"
-                  style={{ width: `${Math.min(100, u.categories * 14)}%` }}
+                  style={{ width: `${u.widthPercent}%` }}
                 />
               </div>
             </div>
@@ -304,8 +231,9 @@ function Insights() {
               After
             </div>
             <p className="mt-2 text-sm">
-              {all.length} structured Demand Cards · {clusters.length} active clusters · ranked by
-              signal strength · routed to recommended actors with concrete suggested actions.
+              {insightsViewModel.totalSignals} structured Demand Cards ·{" "}
+              {insightsViewModel.activeClusterCount} active clusters · ranked by signal strength ·
+              routed to recommended actors with concrete suggested actions.
             </p>
             <div className="mt-3 flex items-center gap-1 text-xs text-primary">
               Production AI inference will further sharpen these signals{" "}
