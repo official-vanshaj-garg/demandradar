@@ -77,3 +77,9 @@ Missing, empty, invalid, or unsupported provider config falls back to SVG.
 DemandCard and DemandCardDrawer render from a pure DemandCardViewModel instead of shaping display text directly from DemandReport in JSX.
 
 The ViewModel centralizes card-only presentation details such as display IDs, category metadata, actor labels, affected-group labels, and coordinate text. Interaction state, store methods, analytics, map data, and domain DemandCard remain outside this presentation boundary.
+
+## Decision 010 — Dashboard and insights analytics are app-owned
+
+Dashboard and insights projections are pure app-owned ViewModel boundaries over DemandReport arrays.
+
+They centralize current aggregation, ranking, matrix, cluster, and opportunity-score calculations without adding a backend analytics engine, duplicate-demand similarity, real AI, or provider-specific map logic.
