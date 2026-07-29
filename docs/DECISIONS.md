@@ -83,3 +83,11 @@ The ViewModel centralizes card-only presentation details such as display IDs, ca
 Dashboard and insights projections are pure app-owned ViewModel boundaries over DemandReport arrays.
 
 They centralize current aggregation, ranking, matrix, cluster, and opportunity-score calculations without adding a backend analytics engine, duplicate-demand similarity, real AI, or provider-specific map logic.
+
+## Decision 011 — Demand clustering is deterministic and conservative
+
+Insights clusters are built by a pure app-owned deterministic clustering boundary before they enter the insights ViewModel.
+
+Clustering stays within the same confirmed area label and demand category, uses lightweight normalized text similarity, and never infers location or exposes individual coordinates. Missing backend analytics, embeddings, vector search, and real AI clustering are intentionally deferred.
+
+The seeded demo intentionally includes a small number of independently worded corroborating reports so conservative clustering is visible without weakening thresholds. Broad area/category coincidence alone is not treated as a cluster.

@@ -6,6 +6,7 @@ import {
   type DemandReport,
   type RecommendedActor,
 } from "@/domain/demand";
+import { buildDemandClusters } from "@/lib/clustering";
 import { BLR_ZONES } from "@/lib/geo/bengaluru";
 import type {
   ActorBreakdownViewModel,
@@ -22,6 +23,7 @@ export function buildInsightsViewModel(demands: DemandReport[]): InsightsViewMod
   const actorBreakdown = buildActorBreakdown(demands);
   const studentAreas = buildStudentAreas(demands);
   const opportunities = clusters.slice(0, 4).map<OpportunityScorecardViewModel>((cluster) => ({
+    id: cluster.id,
     area: cluster.area,
     category: cluster.category,
     categoryLabel: cluster.categoryLabel,
@@ -37,6 +39,7 @@ export function buildInsightsViewModel(demands: DemandReport[]): InsightsViewMod
     activeClusterCount: clusters.length,
     clusters,
     recommendedActions: clusters.slice(0, 6).map<RecommendedActionViewModel>((cluster) => ({
+      id: cluster.id,
       area: cluster.area,
       category: cluster.category,
       count: cluster.count,
@@ -52,26 +55,26 @@ export function buildInsightsViewModel(demands: DemandReport[]): InsightsViewMod
 }
 
 function buildClusters(demands: DemandReport[]) {
-  const map = new Map<string, DemandReport[]>();
-  demands.forEach((d) => {
-    const key = `${d.area_label}__${d.category}`;
-    const rows = map.get(key) || [];
-    rows.push(d);
-    map.set(key, rows);
-  });
+  const reportById = new Map(demands.map((demand) => [demand.id, demand]));
 
   const clusters: EmergingClusterViewModel[] = [];
-  map.forEach((rows, key) => {
+  buildDemandClusters(demands).forEach((demandCluster) => {
+    const rows = demandCluster.reportIds
+      .map((reportId) => reportById.get(reportId))
+      .filter((report): report is DemandReport => Boolean(report));
+
     if (rows.length < 2) return;
-    const [area, category] = key.split("__") as [string, DemandCategory];
     const avgSignal = Math.round(rows.reduce((sum, d) => sum + d.signal_strength, 0) / rows.length);
     const sample = [...rows].sort(
-      (a, b) => PRIORITY_RANK[b.impact_priority] - PRIORITY_RANK[a.impact_priority],
+      (a, b) =>
+        PRIORITY_RANK[b.impact_priority] - PRIORITY_RANK[a.impact_priority] ||
+        a.id.localeCompare(b.id),
     )[0];
-    const meta = CATEGORY_META[category];
+    const meta = CATEGORY_META[demandCluster.category];
     clusters.push({
-      area,
-      category,
+      id: demandCluster.id,
+      area: demandCluster.area,
+      category: demandCluster.category,
       categoryLabel: meta.label,
       categoryColor: meta.color,
       count: rows.length,
@@ -84,7 +87,9 @@ function buildClusters(demands: DemandReport[]) {
     });
   });
 
-  return clusters.sort((a, b) => b.avgSignal * b.count - a.avgSignal * a.count).slice(0, 6);
+  return clusters
+    .sort((a, b) => b.avgSignal * b.count - a.avgSignal * a.count || a.id.localeCompare(b.id))
+    .slice(0, 6);
 }
 
 function buildActorBreakdown(demands: DemandReport[]) {
