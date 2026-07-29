@@ -42,10 +42,7 @@ function Insights() {
           {insightsViewModel.clusters.map((c) => {
             const m = { label: c.categoryLabel, color: c.categoryColor };
             return (
-              <div
-                key={`${c.area}-${c.category}`}
-                className="rounded-2xl border border-border bg-glass p-5 glass"
-              >
+              <div key={c.id} className="rounded-2xl border border-border bg-glass p-5 glass">
                 <div className="flex items-center justify-between">
                   <div
                     className="font-mono text-[10px] uppercase tracking-[0.18em]"
@@ -86,7 +83,7 @@ function Insights() {
         <div className="mt-4 grid gap-3 md:grid-cols-2">
           {insightsViewModel.recommendedActions.map((c) => (
             <div
-              key={`act-${c.area}-${c.category}`}
+              key={`act-${c.id}`}
               className="flex items-start gap-3 rounded-xl border border-primary/30 bg-primary/[0.04] p-4"
             >
               <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary/15 text-primary">
@@ -162,7 +159,7 @@ function Insights() {
             const m = { label: o.categoryLabel, color: o.categoryColor };
             return (
               <div
-                key={`opp-${o.area}-${o.category}`}
+                key={`opp-${o.id}`}
                 className="relative overflow-hidden rounded-2xl border border-border bg-glass p-5 glass"
               >
                 <div

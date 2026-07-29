@@ -278,6 +278,20 @@ const RAW: Array<{
     loc: "Manyata Tech Park",
     upvotes: 34,
   },
+  {
+    raw: "Banashankari ATMs are out of cash for days running; residents need a reliable bank ATM for withdrawals.",
+    zone: "banashankari",
+    loc: "Banashankari Metro",
+    upvotes: 27,
+    daysAgo: 2,
+  },
+  {
+    raw: "Students near Acharya Bangalore need affordable tiffin under ₹80; evening meal options are missing.",
+    zone: "yelahanka",
+    loc: "Near Acharya College",
+    upvotes: 39,
+    daysAgo: 2,
+  },
 ];
 
 let counter = 0;

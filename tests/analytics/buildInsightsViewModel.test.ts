@@ -39,7 +39,7 @@ const clusteredDemands: DemandReport[] = [
     category: "food",
     signal_strength: 80,
     impact_priority: "high",
-    raw_text: "Need affordable dinner near the metro",
+    raw_text: "Need affordable late night food near the metro",
     suggested_action: "Start a budget dinner counter.",
     recommended_actor: "local_business",
   }),
@@ -59,7 +59,7 @@ const clusteredDemands: DemandReport[] = [
     category: "study_space",
     signal_strength: 40,
     impact_priority: "medium",
-    raw_text: "Need quiet study rooms",
+    raw_text: "Need quiet study rooms near college",
     recommended_actor: "community",
   }),
   report({
@@ -68,7 +68,7 @@ const clusteredDemands: DemandReport[] = [
     category: "study_space",
     signal_strength: 60,
     impact_priority: "high",
-    raw_text: "Need library seats near college",
+    raw_text: "Need quiet study seats near college",
     recommended_actor: "community",
   }),
   report({
@@ -136,6 +136,7 @@ describe("buildInsightsViewModel", () => {
         id: `high-${index}`,
         area_label: "Whitefield",
         category: "transport",
+        raw_text: "Need reliable late night bus from Whitefield tech park",
         signal_strength: 100,
       }),
     );
@@ -149,24 +150,28 @@ describe("buildInsightsViewModel", () => {
         id: "food-a",
         area_label: "Indiranagar",
         category: "food",
+        raw_text: "Need affordable lunch near Indiranagar metro",
         recommended_actor: "ngo",
       }),
       report({
         id: "food-b",
         area_label: "Indiranagar",
         category: "food",
+        raw_text: "Affordable lunch needed near Indiranagar metro",
         recommended_actor: "ngo",
       }),
       report({
         id: "study-a",
         area_label: "Koramangala",
         category: "study_space",
+        raw_text: "Need quiet study seats near Koramangala college",
         recommended_actor: "community",
       }),
       report({
         id: "study-b",
         area_label: "Koramangala",
         category: "study_space",
+        raw_text: "Quiet study seats needed near Koramangala college",
         recommended_actor: "community",
       }),
     ]);

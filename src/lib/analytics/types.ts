@@ -66,6 +66,7 @@ export interface DashboardViewModel {
 }
 
 export interface EmergingClusterViewModel {
+  id: string;
   area: string;
   category: DemandCategory;
   categoryLabel: string;
@@ -80,6 +81,7 @@ export interface EmergingClusterViewModel {
 }
 
 export interface RecommendedActionViewModel {
+  id: string;
   area: string;
   count: number;
   avgSignal: number;
@@ -102,6 +104,7 @@ export interface StudentAreaInsightViewModel {
 }
 
 export interface OpportunityScorecardViewModel {
+  id: string;
   area: string;
   category: DemandCategory;
   categoryLabel: string;
