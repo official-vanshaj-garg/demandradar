@@ -97,3 +97,9 @@ The seeded demo intentionally includes a small number of independently worded co
 Cluster detail inspection is an analytics presentation layer over existing deterministic clusters.
 
 The clustering engine remains unchanged, and no backend, persistence migration, or cluster deep-linking is added. Cluster detail presentation excludes exact coordinates and exposes only compact member summaries needed for the Insights UI.
+
+## Decision 013 — AI signal engine stays a single local boundary
+
+The existing classify(ClassifyInput) boundary is sufficient while DemandRadar has one local deterministic classifier.
+
+No provider adapter hierarchy is introduced yet. Direct contract tests protect deterministic classification, privacy redaction, and app-owned location isolation; a remote-provider boundary will be reconsidered only when a real second implementation is approved.
