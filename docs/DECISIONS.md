@@ -91,3 +91,9 @@ Insights clusters are built by a pure app-owned deterministic clustering boundar
 Clustering stays within the same confirmed area label and demand category, uses lightweight normalized text similarity, and never infers location or exposes individual coordinates. Missing backend analytics, embeddings, vector search, and real AI clustering are intentionally deferred.
 
 The seeded demo intentionally includes a small number of independently worded corroborating reports so conservative clustering is visible without weakening thresholds. Broad area/category coincidence alone is not treated as a cluster.
+
+## Decision 012 — Cluster details are presentation-only
+
+Cluster detail inspection is an analytics presentation layer over existing deterministic clusters.
+
+The clustering engine remains unchanged, and no backend, persistence migration, or cluster deep-linking is added. Cluster detail presentation excludes exact coordinates and exposes only compact member summaries needed for the Insights UI.

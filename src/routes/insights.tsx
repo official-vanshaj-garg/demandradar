@@ -1,7 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { useDemands } from "@/lib/data/store";
 import { buildInsightsViewModel } from "@/lib/analytics";
+import { ClusterDetailDrawer } from "@/components/insights/ClusterDetailDrawer";
 import { Lightbulb, Target, Users, Sparkles, ArrowRight, type LucideIcon } from "lucide-react";
 
 export const Route = createFileRoute("/insights")({
@@ -20,8 +21,15 @@ export const Route = createFileRoute("/insights")({
 
 function Insights() {
   const { all } = useDemands();
+  const [selectedClusterId, setSelectedClusterId] = useState<string | null>(null);
 
   const insightsViewModel = useMemo(() => buildInsightsViewModel(all), [all]);
+  const selectedClusterDetail = useMemo(
+    () =>
+      insightsViewModel.clusters.find((cluster) => cluster.id === selectedClusterId)?.detail ??
+      null,
+    [insightsViewModel.clusters, selectedClusterId],
+  );
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6">
@@ -42,7 +50,13 @@ function Insights() {
           {insightsViewModel.clusters.map((c) => {
             const m = { label: c.categoryLabel, color: c.categoryColor };
             return (
-              <div key={c.id} className="rounded-2xl border border-border bg-glass p-5 glass">
+              <button
+                key={c.id}
+                type="button"
+                onClick={() => setSelectedClusterId(c.id)}
+                className="rounded-2xl border border-border bg-glass p-5 text-left transition hover:border-primary/40 hover:bg-muted/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 glass"
+                aria-label={`Inspect ${c.categoryLabel} cluster in ${c.area}`}
+              >
                 <div className="flex items-center justify-between">
                   <div
                     className="font-mono text-[10px] uppercase tracking-[0.18em]"
@@ -66,7 +80,7 @@ function Insights() {
                     style={{ width: `${c.avgSignal}%`, background: m.color }}
                   />
                 </div>
-              </div>
+              </button>
             );
           })}
           {insightsViewModel.clusters.length === 0 && (
@@ -239,6 +253,11 @@ function Insights() {
           </div>
         </div>
       </section>
+
+      <ClusterDetailDrawer
+        viewModel={selectedClusterDetail}
+        onClose={() => setSelectedClusterId(null)}
+      />
     </div>
   );
 }
