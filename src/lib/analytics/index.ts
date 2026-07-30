@@ -1,7 +1,10 @@
 export { buildDashboardViewModel } from "./buildDashboardViewModel";
+export { buildClusterDetailViewModel } from "./buildClusterDetailViewModel";
 export { buildInsightsViewModel } from "./buildInsightsViewModel";
 export type {
   ActorBreakdownViewModel,
+  ClusterDetailViewModel,
+  ClusterMemberViewModel,
   DashboardAreaLeaderboardViewModel,
   DashboardCardSort,
   DashboardCategoryDistributionViewModel,

@@ -98,6 +98,14 @@ describe("buildInsightsViewModel", () => {
       sampleRecommendedActorLabel: "Government / Civic Body",
       categoryLabel: "Affordable Food",
     });
+    expect(viewModel.clusters[0].detail).toMatchObject({
+      clusterId: viewModel.clusters[0].id,
+      areaLabel: "Indiranagar",
+      categoryLabel: "Affordable Food",
+      signalCount: 2,
+      averageSignalStrength: 90,
+      members: [{ id: "food-1" }, { id: "food-2" }],
+    });
   });
 
   test("builds opportunity scores, actor breakdown, student areas, and underserved zones", () => {

@@ -8,6 +8,7 @@ import {
 } from "@/domain/demand";
 import { buildDemandClusters } from "@/lib/clustering";
 import { BLR_ZONES } from "@/lib/geo/bengaluru";
+import { buildClusterDetailViewModel } from "./buildClusterDetailViewModel";
 import type {
   ActorBreakdownViewModel,
   EmergingClusterViewModel,
@@ -84,6 +85,7 @@ function buildClusters(demands: DemandReport[]) {
       sampleSuggestedAction: sample.suggested_action,
       sampleRecommendedActor: sample.recommended_actor,
       sampleRecommendedActorLabel: ACTOR_LABEL[sample.recommended_actor],
+      detail: buildClusterDetailViewModel(demandCluster, rows),
     });
   });
 

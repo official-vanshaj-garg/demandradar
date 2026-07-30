@@ -78,6 +78,7 @@ export interface EmergingClusterViewModel {
   sampleSuggestedAction: string;
   sampleRecommendedActor: RecommendedActor;
   sampleRecommendedActorLabel: string;
+  detail: ClusterDetailViewModel;
 }
 
 export interface RecommendedActionViewModel {
@@ -119,6 +120,25 @@ export interface UnderservedZoneViewModel {
   categories: number;
   total: number;
   widthPercent: number;
+}
+
+export interface ClusterMemberViewModel {
+  id: string;
+  displayId: string;
+  description: string;
+  signalStrength: number;
+  urgencyLabel: string;
+  recommendedActorLabel: string;
+}
+
+export interface ClusterDetailViewModel {
+  clusterId: string;
+  areaLabel: string;
+  categoryLabel: string;
+  categoryColor: string;
+  signalCount: number;
+  averageSignalStrength: number;
+  members: ClusterMemberViewModel[];
 }
 
 export interface InsightsViewModel {
