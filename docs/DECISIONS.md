@@ -103,3 +103,9 @@ The clustering engine remains unchanged, and no backend, persistence migration, 
 The existing classify(ClassifyInput) boundary is sufficient while DemandRadar has one local deterministic classifier.
 
 No provider adapter hierarchy is introduced yet. Direct contract tests protect deterministic classification, privacy redaction, and app-owned location isolation; a remote-provider boundary will be reconsidered only when a real second implementation is approved.
+
+## Decision 014 — Browser-local persistence is isolated and untrusted
+
+Browser-local demand persistence is isolated behind a small local repository module.
+
+Persisted reports and upvote state are treated as untrusted data and validated before entering the application. Seed fixtures remain canonical during ID conflicts, duplicate user reports resolve with the newest timestamp winning or the first valid occurrence winning for identical timestamps, and multi-key upvote writes use best-effort rollback on partial failure. No backend-shaped or remote repository abstraction has been introduced; a remote repository will be reconsidered only when remote persistence is approved.
