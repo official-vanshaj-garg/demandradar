@@ -152,6 +152,23 @@ describe("buildInsightsViewModel", () => {
     expect(buildInsightsViewModel(highSignalDemands).opportunities[0]?.score).toBe(100);
   });
 
+  test("projects provenance labels for emerging clusters", () => {
+    const viewModel = buildInsightsViewModel([
+      report({
+        id: "seed-food-a",
+        area_label: "Indiranagar",
+        raw_text: "Need affordable dinner near Indiranagar metro",
+      }),
+      report({
+        id: "usr-food-b",
+        area_label: "Indiranagar",
+        raw_text: "Affordable dinner needed near Indiranagar metro",
+      }),
+    ]);
+
+    expect(viewModel.clusters[0]?.originLabel).toBe("Mixed demo data");
+  });
+
   test("preserves stable tie behaviour for cluster and actor ordering", () => {
     const viewModel = buildInsightsViewModel([
       report({

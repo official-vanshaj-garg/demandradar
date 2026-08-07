@@ -77,13 +77,13 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { name: "color-scheme", content: "dark" },
-      { title: "DemandRadar — Hyperlocal Demand Intelligence" },
+      { title: "DemandRadar / Hyperlocal Demand Intelligence" },
       {
         name: "description",
         content:
           "Reveal what your community needs before anyone else sees it. DemandRadar is building the demand graph for hyperlocal India.",
       },
-      { property: "og:title", content: "DemandRadar — Hyperlocal Demand Intelligence" },
+      { property: "og:title", content: "DemandRadar / Hyperlocal Demand Intelligence" },
       {
         property: "og:description",
         content: "Reveal what your community needs before anyone else sees it.",

@@ -1,4 +1,5 @@
 import { ACTOR_LABEL, CATEGORY_META, type DemandReport } from "@/domain/demand";
+import { getDemandOriginPresentation } from "./getDemandOrigin";
 import type { DemandCardViewModel } from "./types";
 
 function formatAffectedGroup(value: DemandReport["affected_group"]) {
@@ -15,6 +16,7 @@ function formatCoordinate(value: number) {
 
 export function buildDemandCardViewModel(demand: DemandReport): DemandCardViewModel {
   const meta = CATEGORY_META[demand.category];
+  const origin = getDemandOriginPresentation(demand.id);
 
   return {
     id: demand.id,
@@ -44,5 +46,7 @@ export function buildDemandCardViewModel(demand: DemandReport): DemandCardViewMo
     latitudeText: formatCoordinate(demand.latitude),
     longitudeText: formatCoordinate(demand.longitude),
     areaLabel: demand.area_label,
+    origin: origin.origin,
+    originLabel: origin.label,
   };
 }

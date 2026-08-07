@@ -92,6 +92,15 @@ export function SvgDemandMapRenderer({ viewModel, onSelectDemand }: Props) {
               onMouseEnter={() => setHover(marker.id)}
               onMouseLeave={() => setHover(null)}
               onClick={() => onSelectDemand(marker.demand)}
+              onKeyDown={(event) => {
+                if (event.key === "Enter" || event.key === " ") {
+                  event.preventDefault();
+                  onSelectDemand(marker.demand);
+                }
+              }}
+              role="button"
+              tabIndex={0}
+              aria-label={`Open demand card: ${marker.title}`}
             >
               <circle
                 cx={marker.x}
@@ -137,7 +146,7 @@ export function SvgDemandMapRenderer({ viewModel, onSelectDemand }: Props) {
               </div>
               <div className="mt-0.5 line-clamp-2 font-medium">{marker.title}</div>
               <div className="mt-0.5 text-[10px] text-muted-foreground">
-                {marker.areaLabel} · signal {marker.signalStrength}
+                {marker.areaLabel} / signal {marker.signalStrength}
               </div>
             </div>
           );

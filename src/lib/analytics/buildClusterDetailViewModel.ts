@@ -1,5 +1,5 @@
 import { CATEGORY_META, type DemandReport } from "@/domain/demand";
-import { buildDemandCardViewModel } from "@/lib/demand";
+import { buildDemandCardViewModel, getDemandOriginSummary } from "@/lib/demand";
 import type { DemandCluster } from "@/lib/clustering";
 import type { ClusterDetailViewModel, ClusterMemberViewModel } from "./types";
 
@@ -21,6 +21,7 @@ export function buildClusterDetailViewModel(
         signalStrength: card.signalStrength,
         urgencyLabel: formatUrgencyLabel(card.urgency),
         recommendedActorLabel: card.recommendedActorLabel,
+        originLabel: card.originLabel,
       },
     ];
   });
@@ -37,6 +38,7 @@ export function buildClusterDetailViewModel(
     categoryColor: meta.color,
     signalCount: members.length,
     averageSignalStrength,
+    originLabel: getDemandOriginSummary(members.map((member) => member.id)).label,
     members,
   };
 }

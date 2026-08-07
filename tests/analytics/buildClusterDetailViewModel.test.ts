@@ -59,7 +59,31 @@ describe("buildClusterDetailViewModel", () => {
       categoryColor: "oklch(0.80 0.17 70)",
       signalCount: 2,
       averageSignalStrength: 90,
+      originLabel: "Saved in this browser",
     });
+  });
+
+  test("distinguishes sample-only, browser-local-only, and mixed member provenance", () => {
+    const sampleOnly = buildClusterDetailViewModel(cluster({ reportIds: ["seed-a", "seed-b"] }), [
+      report({ id: "seed-a" }),
+      report({ id: "seed-b" }),
+    ]);
+    const browserOnly = buildClusterDetailViewModel(cluster({ reportIds: ["usr-a", "usr-b"] }), [
+      report({ id: "usr-a" }),
+      report({ id: "usr-b" }),
+    ]);
+    const mixed = buildClusterDetailViewModel(cluster({ reportIds: ["seed-a", "usr-a"] }), [
+      report({ id: "seed-a" }),
+      report({ id: "usr-a" }),
+    ]);
+
+    expect(sampleOnly.originLabel).toBe("Sample data");
+    expect(browserOnly.originLabel).toBe("Saved in this browser");
+    expect(mixed.originLabel).toBe("Mixed demo data");
+    expect(mixed.members.map((member) => member.originLabel)).toEqual([
+      "Sample data",
+      "Saved in this browser",
+    ]);
   });
 
   test("includes every cluster member in deterministic id order", () => {

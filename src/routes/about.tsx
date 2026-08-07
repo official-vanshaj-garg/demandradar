@@ -4,11 +4,11 @@ import { ShieldCheck, Sparkles, Radar, Map, ArrowRight, type LucideIcon } from "
 export const Route = createFileRoute("/about")({
   head: () => ({
     meta: [
-      { title: "About Â· DemandRadar" },
+      { title: "About / DemandRadar" },
       {
         name: "description",
         content:
-          "DemandRadar is a demand intelligence layer for hyperlocal India, starting with Bengaluru.",
+          "DemandRadar is a local-demo demand intelligence product for hyperlocal India, starting with Bengaluru.",
       },
     ],
   }),
@@ -20,79 +20,74 @@ function About() {
     <div className="mx-auto max-w-4xl px-4 py-14 sm:px-6">
       <div className="font-mono text-[10px] uppercase tracking-[0.22em] text-primary">About</div>
       <h1 className="mt-1 font-display text-4xl font-semibold leading-tight sm:text-5xl">
-        We're building the <span className="text-gradient">demand graph</span> for hyperlocal India.
+        We&apos;re building the <span className="text-gradient">demand graph</span> for hyperlocal
+        India.
       </h1>
       <p className="mt-4 text-lg text-muted-foreground">
-        DemandRadar turns scattered local frustrations into structured, privacy-safe Demand Cards
-        â€” and surfaces them on a map and dashboard so the right actors can respond before the gap
-        turns into a crisis.
+        DemandRadar turns local gaps into structured Demand Cards and shows how a future demand
+        intelligence product could make unmet needs easier to inspect.
       </p>
 
       <Section title="What DemandRadar is" icon={Radar}>
         <p>
-          An intelligence layer between residents and the people who can act â€” local businesses,
-          civic bodies, NGOs, and entrepreneurs. Every signal becomes a typed Demand Card with
+          A local demo for structuring missing-service reports into typed Demand Cards with
           category, urgency, signal strength, confidence, and a recommended actor.
         </p>
       </Section>
 
-      <Section title="Why this is demand intelligence" icon={Sparkles}>
+      <Section title="Why demand intelligence" icon={Sparkles}>
         <p>
-          Traditional local feedback stays scattered and hard to act on. DemandRadar does the
-          opposite: it converts unmet needs into{" "}
-          <span className="text-foreground">demand intelligence</span> â€” ranked, geo-tagged,
-          clustered, and routed. Operators see opportunity. Civic bodies see priority. Residents see
-          action.
+          Google Maps shows what exists. DemandRadar explores how structured demand signals can
+          reveal what is missing. The current product uses hand-authored sample data alongside
+          reports saved in each browser.
         </p>
       </Section>
 
-      <Section title="How it works" icon={Map}>
+      <Section title="How this demo works" icon={Map}>
         <ol className="space-y-2 text-muted-foreground">
           <li>
-            <span className="text-primary font-mono">01</span> &nbsp;Anyone reports a missing
-            service in plain language. No login. No PII.
+            <span className="text-primary font-mono">01</span> &nbsp;Anyone can describe a missing
+            service in plain language. No account is required.
           </li>
           <li>
-            <span className="text-primary font-mono">02</span> &nbsp;The intelligence layer
+            <span className="text-primary font-mono">02</span> &nbsp;A deterministic demo classifier
             structures the report into a typed Demand Card.
           </li>
           <li>
-            <span className="text-primary font-mono">03</span> &nbsp;Cards stream into the live
-            feed, plot on the map, cluster by area + category.
+            <span className="text-primary font-mono">03</span> &nbsp;The report is saved in that
+            browser and appears alongside sample data on the map, dashboard, and insights pages.
           </li>
           <li>
-            <span className="text-primary font-mono">04</span> &nbsp;The Insights page surfaces
-            opportunity scores and recommended actions per cluster.
+            <span className="text-primary font-mono">04</span> &nbsp;Insights use deterministic
+            area-and-category clustering for this demo.
           </li>
         </ol>
       </Section>
 
-      <Section title="Privacy-first design" icon={ShieldCheck}>
+      <Section title="Local storage and privacy" icon={ShieldCheck}>
         <ul className="list-disc space-y-1 pl-5 text-muted-foreground">
-          <li>Anonymous reporting â€” only an opaque session id is stored locally.</li>
-          <li>Coordinates rounded to ~110m before storage.</li>
-          <li>Phone numbers, emails and long ID-like numbers are auto-redacted from raw text.</li>
-          <li>No tracking pixels, no third-party analytics in the MVP.</li>
+          <li>No account is required for this local demo.</li>
+          <li>Coordinates are rounded to approximately 110m before storage.</li>
+          <li>
+            Supported phone, email, and long-ID patterns are redacted before new reports are saved.
+          </li>
+          <li>Reports and support state are saved only in the current browser.</li>
         </ul>
       </Section>
 
-      <Section title="Model-ready AI architecture" icon={Sparkles}>
+      <Section title="Current classifier" icon={Sparkles}>
         <p>
-          Today, the intelligence layer runs a deterministic demo classifier so the experience is
-          fast and reproducible. The contract â€”{" "}
-          <span className="font-mono text-primary">classify(input) â†’ ClassifyOutput</span> â€” is
-          the only swap point. When a production model is wired into the adapter, the UI, schema,
-          dashboard, and map don't move. Future model integration will run server-side and stream
-          sharper categorisation, urgency calibration, and cluster naming.
+          The current classifier is deterministic and runs in-process. No production AI model is
+          connected. The <span className="font-mono text-primary">classify(input)</span> boundary
+          keeps future model work separate from the UI and location fields.
         </p>
       </Section>
 
-      <Section title="Future startup vision" icon={Radar}>
+      <Section title="Future product vision" icon={Radar}>
         <p>
-          Bengaluru is the pilot. Next: every campus town, every Tier-1 ward, every Tier-2
-          neighborhood. Long-term, DemandRadar becomes the API for hyperlocal demand â€” used by
-          quick-commerce, transit planners, micro-entrepreneurs, and civic-tech operators to
-          allocate resources where residents are actively asking for them.
+          DemandRadar&apos;s thesis is to build the demand graph for hyperlocal India. Future
+          product work may explore shared, verified demand intelligence once the required
+          infrastructure and operating model are approved.
         </p>
       </Section>
 
@@ -100,9 +95,9 @@ function About() {
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div>
             <div className="font-mono text-[10px] uppercase tracking-[0.18em] text-primary">
-              Pilot DemandRadar
+              Local demo
             </div>
-            <div className="mt-1 font-display text-xl">Bring it to your area.</div>
+            <div className="mt-1 font-display text-xl">Explore demand signals in Bengaluru.</div>
           </div>
           <div className="flex gap-2">
             <Link

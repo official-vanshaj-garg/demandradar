@@ -13,7 +13,7 @@ export function AppFooter() {
             <span className="font-display font-semibold">DemandRadar</span>
           </div>
           <p className="mt-3 max-w-xs text-sm text-muted-foreground">
-            Building the demand graph for hyperlocal India. Pilot: Bengaluru.
+            Building the demand graph for hyperlocal India. Local Bengaluru demo.
           </p>
         </div>
         <div>
@@ -54,10 +54,10 @@ export function AppFooter() {
               </Link>
             </li>
             <li>
-              <span className="text-muted-foreground">Pilot: Bengaluru</span>
+              <span className="text-muted-foreground">Local Bengaluru demo</span>
             </li>
             <li>
-              <span className="text-muted-foreground">Demo · AI model adapter ready</span>
+              <span className="text-muted-foreground">Deterministic demo classifier</span>
             </li>
           </ul>
         </div>
@@ -66,14 +66,14 @@ export function AppFooter() {
             Privacy
           </div>
           <p className="mt-3 text-sm text-muted-foreground">
-            Anonymous reporting. No PII collected. Coordinates rounded to ~110m. Personal contacts
-            auto-redacted.
+            No account required. Coordinates are rounded to ~110m. Supported phone, email, and
+            long-ID patterns are redacted before new reports save in this browser.
           </p>
         </div>
       </div>
       <div className="border-t border-border py-4 text-center text-xs text-muted-foreground">
-        © {new Date().getFullYear()} DemandRadar · Reveal what your community needs before anyone
-        else sees it.
+        Copyright {new Date().getFullYear()} DemandRadar / Reveal what your community needs before
+        anyone else sees it.
       </div>
     </footer>
   );

@@ -11,6 +11,12 @@ function sortedReportIdGroups(reportIdGroups: string[][]) {
 }
 
 describe("seed clustering fixture", () => {
+  test("keeps canonical sample ids, neutral support, and neutral workflow state", () => {
+    expect(SEED_DEMANDS.every((demand) => demand.id.startsWith("seed-"))).toBe(true);
+    expect(SEED_DEMANDS.every((demand) => demand.upvotes === 0)).toBe(true);
+    expect(SEED_DEMANDS.every((demand) => demand.status === "new")).toBe(true);
+  });
+
   test("contains independently worded repeated-demand scenarios for the demo", () => {
     expect(displayedSeedClusters()).toMatchObject([
       {

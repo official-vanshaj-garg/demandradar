@@ -1,7 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { useDemands } from "@/lib/data/store";
-import { buildDemandCardViewModel, type DemandCardViewModel } from "@/lib/demand";
+import {
+  buildDemandCardViewModel,
+  getDemandOriginPresentation,
+  type DemandCardViewModel,
+} from "@/lib/demand";
 import { buildDemandMapViewModel } from "@/lib/map";
 import { CATEGORY_META, type DemandCategory } from "@/domain/demand";
 import { DemandRadarMap } from "@/components/map/DemandRadarMap";
@@ -11,11 +15,11 @@ import { Filter } from "lucide-react";
 export const Route = createFileRoute("/map")({
   head: () => ({
     meta: [
-      { title: "Demand Map · DemandRadar" },
+      { title: "Demand Map / DemandRadar" },
       {
         name: "description",
         content:
-          "Live hyperlocal demand map for Bengaluru. Filter by category and urgency, click any signal to open the Demand Card.",
+          "Local demo demand map for Bengaluru. Metrics include sample data and reports saved in this browser.",
       },
     ],
   }),
@@ -46,7 +50,10 @@ function MapPage() {
           <p className="mt-1 text-sm text-muted-foreground">
             {ready
               ? `${mapViewModel.filteredCount} of ${mapViewModel.allCount} signals`
-              : "Loading signals…"}
+              : "Loading signals..."}
+          </p>
+          <p className="mt-1 text-xs text-muted-foreground">
+            Metrics include sample data and reports saved in this browser.
           </p>
         </div>
         <div className="flex items-center gap-3">
@@ -100,6 +107,7 @@ function MapPage() {
           <ul className="divide-y divide-border">
             {mapViewModel.sidebarDemands.map((d) => {
               const m = CATEGORY_META[d.category];
+              const origin = getDemandOriginPresentation(d.id);
               return (
                 <li key={d.id}>
                   <button
@@ -120,7 +128,7 @@ function MapPage() {
                     </div>
                     <div className="mt-1 line-clamp-2 text-sm">{d.title}</div>
                     <div className="mt-0.5 text-[11px] text-muted-foreground">
-                      {d.area_label} · urgency {d.urgency}/5
+                      {d.area_label} / urgency {d.urgency}/5 / {origin.label}
                     </div>
                   </button>
                 </li>

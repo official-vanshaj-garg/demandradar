@@ -22,13 +22,13 @@ import { CATEGORY_META } from "@/domain/demand";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "DemandRadar — Reveal what your community needs" },
+      { title: "DemandRadar / Reveal what your community needs" },
       {
         name: "description",
         content:
-          "DemandRadar turns scattered local gaps into structured Demand Cards. Pilot live in Bengaluru. AI signal engine ready.",
+          "DemandRadar is a local Bengaluru demo using sample data, browser-local reports, and a deterministic classifier.",
       },
-      { property: "og:title", content: "DemandRadar — Hyperlocal Demand Intelligence" },
+      { property: "og:title", content: "DemandRadar / Hyperlocal Demand Intelligence" },
       { property: "og:description", content: "Building the demand graph for hyperlocal India." },
     ],
   }),
@@ -53,12 +53,12 @@ function Landing() {
             </h1>
             <p className="mt-5 max-w-xl text-base text-muted-foreground sm:text-lg">
               DemandRadar turns scattered demand signals, group chats and local frustrations into
-              <span className="text-foreground"> structured Demand Cards</span> — geo-tagged,
+              <span className="text-foreground"> structured Demand Cards</span> / geo-tagged,
               privacy-safe, and ranked by signal strength.
             </p>
             <p className="mt-3 max-w-xl text-sm text-muted-foreground">
-              Building the demand graph for hyperlocal India. Pilot live in{" "}
-              <span className="text-primary">Bengaluru</span>.
+              Building the demand graph for hyperlocal India. Local demo using sample data and
+              reports saved in this browser in <span className="text-primary">Bengaluru</span>.
             </p>
 
             <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
@@ -79,7 +79,7 @@ function Landing() {
                 to="/about"
                 className="inline-flex items-center gap-2 px-2 py-2 text-sm text-muted-foreground hover:text-primary"
               >
-                Pilot DemandRadar in your area <ArrowRight className="h-3.5 w-3.5" />
+                About this local demo <ArrowRight className="h-3.5 w-3.5" />
               </Link>
             </div>
 
@@ -103,7 +103,7 @@ function Landing() {
             <Problem
               icon={Activity}
               title="Demand is invisible"
-              body="Frustrations live in WhatsApp groups, Reddit threads, Google reviews — never reaching the people who can act."
+              body="Frustrations live in WhatsApp groups, Reddit threads, and Google reviews, often without reaching the people who can act."
             />
             <Problem
               icon={Radar}
@@ -113,7 +113,7 @@ function Landing() {
             <Problem
               icon={Sparkles}
               title="The signal is scattered"
-              body="No common structure, no priority, no actor. Just noise — until now."
+              body="No common structure, no priority, no actor. Just noise without a clear next step."
             />
           </div>
         </div>
@@ -152,7 +152,7 @@ function Landing() {
           <Step
             n={1}
             title="Report"
-            body="Anyone can describe a missing local service in plain language. No login. No PII."
+            body="Anyone can describe a missing local service in plain language. No account required."
           />
           <Step
             n={2}
@@ -171,7 +171,7 @@ function Landing() {
       <section className="mx-auto mt-20 max-w-7xl px-4 sm:px-6">
         <SectionHeading
           kicker="Before vs After"
-          title="Scattered signals → Structured demand intelligence"
+          title="Scattered signals to structured demand intelligence"
         />
         <div className="mt-8 grid gap-6 md:grid-cols-2">
           <div className="rounded-2xl border border-border bg-surface/40 p-5">
@@ -192,7 +192,7 @@ function Landing() {
               After
             </div>
             <h3 className="mt-1 font-display text-lg">
-              Demand Cards · ranked, located, actionable
+              Demand Cards / ranked, located, actionable
             </h3>
             <div className="mt-4 space-y-2">
               <CardRow
@@ -210,7 +210,7 @@ function Landing() {
                 color="oklch(0.68 0.22 25)"
               />
               <CardRow
-                title="Improve street lighting · Koramangala 6th"
+                title="Improve street lighting / Koramangala 6th"
                 cat="Women's Safety"
                 sig={89}
                 pri="Critical"
@@ -237,7 +237,7 @@ function Landing() {
 
       {/* USE CASES */}
       <section className="mx-auto mt-20 max-w-7xl px-4 sm:px-6">
-        <SectionHeading kicker="Who it's for" title="One signal layer · five audiences" />
+        <SectionHeading kicker="Who it's for" title="One signal layer / five audiences" />
         <div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
           <UseCase
             icon={GraduationCap}
@@ -257,7 +257,7 @@ function Landing() {
           <UseCase
             icon={Landmark}
             label="Civic bodies"
-            body="Privacy-safe priority signals from real residents."
+            body="Structured demand signals for local exploration."
           />
           <UseCase
             icon={Lightbulb}
@@ -273,13 +273,13 @@ function Landing() {
           <div className="grid gap-6 md:grid-cols-[1.5fr_1fr] md:items-center">
             <div className="min-w-0">
               <div className="font-mono text-[10px] uppercase tracking-[0.18em] text-primary">
-                Pilot DemandRadar
+                Local demo
               </div>
               <h3 className="mt-2 font-display text-2xl font-semibold leading-tight sm:text-3xl">
-                Bring DemandRadar to your area.
+                Explore DemandRadar in your area.
               </h3>
               <p className="mt-2 max-w-xl text-muted-foreground">
-                We're piloting in Bengaluru. Next: your campus, your ward, your city.
+                This local demo starts with Bengaluru sample data and browser-local reports.
               </p>
             </div>
             <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap md:justify-end">
@@ -384,7 +384,7 @@ function CardRow({
       <div className="min-w-0 flex-1">
         <div className="truncate text-sm font-medium">{title}</div>
         <div className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
-          {cat} · {pri}
+          {cat} / {pri}
         </div>
       </div>
       <div className="font-mono text-xs text-primary">{sig}</div>

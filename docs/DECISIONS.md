@@ -109,3 +109,9 @@ No provider adapter hierarchy is introduced yet. Direct contract tests protect d
 Browser-local demand persistence is isolated behind a small local repository module.
 
 Persisted reports and upvote state are treated as untrusted data and validated before entering the application. Seed fixtures remain canonical during ID conflicts, duplicate user reports resolve with the newest timestamp winning or the first valid occurrence winning for identical timestamps, and multi-key upvote writes use best-effort rollback on partial failure. No backend-shaped or remote repository abstraction has been introduced; a remote repository will be reconsidered only when remote persistence is approved.
+
+## Decision 015 - Product truth and demo integrity
+
+The current prototype presents `seed-*` records as sample data and all other current reports as saved in the active browser. Sample records start with zero support and a neutral workflow state; visible support is labeled "I need this too" and remains browser-local.
+
+The current classifier and clustering are deterministic. No production AI model, shared public engagement, or live public pilot is claimed. A DemandReport provenance migration is not needed while canonical seed IDs remain the presentation boundary.

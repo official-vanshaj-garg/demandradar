@@ -18,7 +18,7 @@ import { AIBadge } from "@/components/layout/AIBadge";
 export const Route = createFileRoute("/report")({
   head: () => ({
     meta: [
-      { title: "Report a Need · DemandRadar" },
+      { title: "Report a Need / DemandRadar" },
       {
         name: "description",
         content:
@@ -30,7 +30,7 @@ export const Route = createFileRoute("/report")({
 });
 
 const EXAMPLES = [
-  "We need a 24-hour study library near our college — PG rooms are too noisy.",
+  "We need a 24-hour study library near our college. PG rooms are too noisy.",
   "No 24x7 pharmacy nearby. Night-time emergencies are scary.",
   "Auto refusals after 10pm leave women stranded at the metro station.",
   "Affordable thali under ₹100 is impossible to find in this area.",
@@ -148,14 +148,14 @@ function ReportPage() {
   function submit() {
     if (!card || !zone) return;
     const id = `usr-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
-    // Resolve location from the user's selection — single source of truth.
+    // Resolve location from the user's selection - single source of truth.
     // resolveLocation guarantees: zone-derived centroid fallback if no coords,
     // and "Unknown Bengaluru Area" instead of any real zone if area is unknown.
     const loc = resolveLocation({
       zone_key: zone.key,
       area_label: zone.label,
       location_text: locText,
-      // Apply ±~1km deterministic jitter so manual pins don't stack on the centroid.
+      // Apply +/-~1km deterministic jitter so manual pins don't stack on the centroid.
       latitude: locationLock?.latitude ?? jitter(zone.lat, id, 1),
       longitude: locationLock?.longitude ?? jitter(zone.lng, id, 7),
       accuracy_meters: locationLock?.accuracy_meters,
@@ -174,9 +174,9 @@ function ReportPage() {
       id,
       created_at: new Date().toISOString(),
       reporter_session: getSessionId(),
-      raw_text: text,
+      raw_text: card.clean_text,
       status: "new",
-      upvotes: 1,
+      upvotes: 0,
       ...card,
       location_text: loc.location_text,
       area_label: loc.area_label,
@@ -198,7 +198,9 @@ function ReportPage() {
           <h1 className="mt-1 font-display text-3xl font-semibold sm:text-4xl">
             Tell DemandRadar what's missing
           </h1>
-          <p className="mt-1 text-sm text-muted-foreground">Anonymous · privacy-safe · no login.</p>
+          <p className="mt-1 text-sm text-muted-foreground">
+            No account required. Saved reports are local to this browser.
+          </p>
         </div>
         <AIBadge />
       </div>
@@ -343,7 +345,7 @@ function ReportPage() {
             <div>
               <h2 className="font-display text-xl font-semibold">3. Preview Demand Card</h2>
               <p className="mt-1 text-sm text-muted-foreground">
-                Structured by the DemandRadar intelligence layer · demo mode.
+                Structured by the deterministic demo classifier.
               </p>
               <DemandPreview card={card} area={zone.label} location={locText || zone.label} />
               <div className="mt-6 flex justify-between">
@@ -372,8 +374,8 @@ function ReportPage() {
                 Signal received in {submitted.area_label}.
               </h2>
               <p className="mt-1 text-sm text-muted-foreground">
-                Your Demand Card is now live on the DemandRadar Bengaluru pilot — visible on the
-                dashboard, map and insights in real time.
+                Your Demand Card is saved in this browser and appears on this browser's dashboard,
+                map, and insights.
               </p>
               <div className="mx-auto mt-6 max-w-md rounded-xl border border-primary/30 bg-primary/5 p-4 text-left">
                 <div className="font-mono text-[10px] uppercase tracking-widest text-primary">
@@ -381,7 +383,7 @@ function ReportPage() {
                 </div>
                 <div className="mt-1 text-sm font-semibold">{submitted.title}</div>
                 <div className="mt-1 text-xs text-muted-foreground">
-                  {submitted.area_label} · signal {submitted.signal_strength} ·{" "}
+                  {submitted.area_label} / signal {submitted.signal_strength} /{" "}
                   {submitted.impact_priority} impact
                 </div>
               </div>
@@ -453,10 +455,12 @@ function ReportPage() {
             </svg>
           </div>
           <ul className="mt-4 space-y-2 text-xs text-muted-foreground">
-            <li>· Anonymous reporting (no login)</li>
-            <li>· Coordinates rounded for privacy</li>
-            <li>· Phone / email auto-redacted</li>
-            <li>· Recommended actor surfaced from category</li>
+            <li>No account required</li>
+            <li>Coordinates rounded for privacy</li>
+            <li>
+              Supported phone, email, and long-ID patterns are redacted before new reports save
+            </li>
+            <li>Recommended actor derived by the deterministic demo classifier</li>
           </ul>
         </aside>
       </div>
@@ -482,7 +486,7 @@ function DemandPreview({
             className="font-mono text-[10px] uppercase tracking-[0.18em]"
             style={{ color: meta.color }}
           >
-            {meta.label} · {card.sub_category}
+            {meta.label} / {card.sub_category}
           </div>
           <h3 className="mt-1 font-display text-lg font-semibold leading-snug">{card.title}</h3>
           <p className="mt-1 text-sm text-muted-foreground">{card.need_summary}</p>
@@ -504,10 +508,9 @@ function DemandPreview({
       </div>
       <div className="mt-4 grid gap-2 sm:grid-cols-2">
         <Field label="Location">
-          {location} · {area}
+          {location} / {area}
         </Field>
         <Field label="Recommended actor">{ACTOR_LABEL[card.recommended_actor]}</Field>
-        <Field label="Similar reports nearby">{card.similar_reports_count}</Field>
         <Field label="Suggested action">{card.suggested_action}</Field>
       </div>
     </div>

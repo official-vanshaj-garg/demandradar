@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import type { DemandReport } from "@/domain/demand";
 import { CATEGORY_META } from "@/domain/demand";
 import { useDemands } from "@/lib/data/store";
+import { getDemandOriginPresentation } from "@/lib/demand";
 
 export function LiveSignalFeed({ limit = 6 }: { limit?: number }) {
   const { all, ready } = useDemands();
@@ -23,11 +24,11 @@ export function LiveSignalFeed({ limit = 6 }: { limit?: number }) {
             <span className="relative inline-flex h-2 w-2 rounded-full bg-primary" />
           </span>
           <h3 className="font-display text-sm font-semibold uppercase tracking-widest">
-            Live signal feed
+            Local demo feed
           </h3>
         </div>
         <span className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
-          Bengaluru pilot
+          Sample + browser-local
         </span>
       </div>
       <ul className="divide-y divide-border">
@@ -42,6 +43,7 @@ export function LiveSignalFeed({ limit = 6 }: { limit?: number }) {
 function SignalRow({ d, delay }: { d: DemandReport; delay: number }) {
   const meta = CATEGORY_META[d.category];
   const ago = timeAgo(d.created_at);
+  const origin = getDemandOriginPresentation(d.id);
   return (
     <li
       className="anim-ticker-in flex items-center gap-3 py-3"
@@ -60,10 +62,12 @@ function SignalRow({ d, delay }: { d: DemandReport; delay: number }) {
         </div>
         <div className="mt-0.5 flex items-center gap-2 text-[11px] text-muted-foreground">
           <span style={{ color: meta.color }}>{meta.label}</span>
-          <span>·</span>
+          <span>/</span>
           <span>{d.area_label}</span>
-          <span>·</span>
+          <span>/</span>
           <span className="font-mono">signal {d.signal_strength}</span>
+          <span>/</span>
+          <span>{origin.label}</span>
         </div>
       </div>
     </li>
