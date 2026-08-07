@@ -328,8 +328,8 @@ export function buildSeedDemands(): DemandReport[] {
       area_label: zone.label,
       latitude: lat,
       longitude: lng,
-      status: row.status ?? "new",
-      upvotes: row.upvotes ?? Math.floor(10 + ((i * 7) % 40)),
+      status: "new",
+      upvotes: 0,
       ...ai,
     } as DemandReport;
   });

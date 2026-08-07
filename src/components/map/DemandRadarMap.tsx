@@ -20,7 +20,7 @@ export function DemandRadarMap({ viewModel, onSelectDemand }: Props) {
       {/* corner badge */}
       <div className="absolute left-3 top-3 flex items-center gap-2 rounded-md border border-border bg-background/60 px-2 py-1 font-mono text-[10px] uppercase tracking-widest backdrop-blur">
         <span className="h-1.5 w-1.5 rounded-full bg-primary anim-signal-blink" />
-        BLR · live demand grid
+        BLR / local demo demand grid
       </div>
       <div className="absolute bottom-3 right-3 rounded-md border border-border bg-background/60 px-2 py-1 font-mono text-[10px] uppercase tracking-widest backdrop-blur">
         {viewModel.markers.length} signals

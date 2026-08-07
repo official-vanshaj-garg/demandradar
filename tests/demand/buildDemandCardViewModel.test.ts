@@ -50,6 +50,8 @@ describe("buildDemandCardViewModel", () => {
       rawText: "Need late evening study rooms near the metro",
       areaLabel: "Indiranagar",
       upvotes: 12,
+      origin: "browser-local",
+      originLabel: "Saved in this browser",
     });
   });
 
@@ -84,5 +86,12 @@ describe("buildDemandCardViewModel", () => {
     expect(viewModel.recommendedActorLabel).toBe("Transport Authority");
     expect(viewModel.latitudeText).toBe("12.000");
     expect(viewModel.longitudeText).toBe("77.000");
+  });
+
+  test("projects sample provenance from canonical seed ids", () => {
+    const viewModel = buildDemandCardViewModel({ ...baseDemand, id: "seed-01-demo" });
+
+    expect(viewModel.origin).toBe("sample");
+    expect(viewModel.originLabel).toBe("Sample data");
   });
 });

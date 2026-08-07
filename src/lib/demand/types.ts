@@ -1,4 +1,5 @@
 import type { DemandCategory, DemandStatus, ImpactPriority, PrivacyStatus } from "@/domain/demand";
+import type { DemandOrigin } from "./getDemandOrigin";
 
 export interface DemandCardCategoryPresentation {
   key: DemandCategory;
@@ -30,4 +31,6 @@ export interface DemandCardViewModel {
   latitudeText: string;
   longitudeText: string;
   areaLabel: string;
+  origin: DemandOrigin;
+  originLabel: string;
 }

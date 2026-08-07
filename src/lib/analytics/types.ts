@@ -78,6 +78,7 @@ export interface EmergingClusterViewModel {
   sampleSuggestedAction: string;
   sampleRecommendedActor: RecommendedActor;
   sampleRecommendedActorLabel: string;
+  originLabel: string;
   detail: ClusterDetailViewModel;
 }
 
@@ -129,6 +130,7 @@ export interface ClusterMemberViewModel {
   signalStrength: number;
   urgencyLabel: string;
   recommendedActorLabel: string;
+  originLabel: string;
 }
 
 export interface ClusterDetailViewModel {
@@ -138,6 +140,7 @@ export interface ClusterDetailViewModel {
   categoryColor: string;
   signalCount: number;
   averageSignalStrength: number;
+  originLabel: string;
   members: ClusterMemberViewModel[];
 }
 

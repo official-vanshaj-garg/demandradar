@@ -34,7 +34,7 @@ export function ClusterDetailDrawer({
               {viewModel.areaLabel} demand cluster
             </SheetTitle>
             <SheetDescription>
-              Corroborating demand signals grouped by deterministic app-owned clustering.
+              {viewModel.originLabel}. Demand signals grouped by deterministic app-owned clustering.
             </SheetDescription>
           </SheetHeader>
 
@@ -64,10 +64,12 @@ export function ClusterDetailDrawer({
                         <Hash className="h-3 w-3" />
                         {member.displayId}
                       </span>
-                      <span>·</span>
+                      <span>/</span>
                       <span>{member.urgencyLabel}</span>
-                      <span>·</span>
+                      <span>/</span>
                       <span>{member.signalStrength} signal</span>
+                      <span>/</span>
+                      <span>{member.originLabel}</span>
                     </div>
                     <p className="mt-2 text-sm leading-relaxed text-foreground">
                       "{member.description}"

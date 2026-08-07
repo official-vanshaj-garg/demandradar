@@ -3,7 +3,6 @@
 // the single swap point — a real remote provider can be plugged in
 // for demo builds without touching this component.
 import { Sparkles } from "lucide-react";
-import { AI_MODE } from "@/lib/ai";
 
 export function AIBadge({ compact = false }: { compact?: boolean }) {
   return (
@@ -14,13 +13,10 @@ export function AIBadge({ compact = false }: { compact?: boolean }) {
       </span>
       <Sparkles className="h-3.5 w-3.5 text-primary" />
       <span className="font-mono uppercase tracking-wider text-foreground/90">
-        AI Signal Engine
+        Deterministic demo classifier
       </span>
       {!compact && (
-        <span className="text-muted-foreground">
-          • running in <span className="text-primary">{AI_MODE === "mock" ? "demo" : AI_MODE}</span>{" "}
-          mode
-        </span>
+        <span className="text-muted-foreground">/ no production AI model connected</span>
       )}
     </div>
   );

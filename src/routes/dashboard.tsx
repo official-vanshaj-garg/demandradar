@@ -11,11 +11,11 @@ import { Activity, TrendingUp, MapPin, Layers, type LucideIcon } from "lucide-re
 export const Route = createFileRoute("/dashboard")({
   head: () => ({
     meta: [
-      { title: "Intelligence Dashboard · DemandRadar" },
+      { title: "Demand Dashboard / DemandRadar" },
       {
         name: "description",
         content:
-          "The Demand Intelligence OS for Bengaluru: signals, hotspots, opportunity scores, and recommended actions.",
+          "Local-demo demand signals, hotspots, opportunity scores, and recommended actions for Bengaluru.",
       },
     ],
   }),
@@ -45,12 +45,12 @@ function Dashboard() {
   return (
     <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6">
       <div className="mb-2 flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.22em] text-primary">
-        <span className="h-1.5 w-1.5 rounded-full bg-primary anim-signal-blink" /> Demand
-        Intelligence OS · Bengaluru pilot
+        <span className="h-1.5 w-1.5 rounded-full bg-primary anim-signal-blink" /> Demand Local demo
+        / Bengaluru
       </div>
       <h1 className="font-display text-3xl font-semibold sm:text-4xl">Intelligence Dashboard</h1>
       <p className="mt-1 text-sm text-muted-foreground">
-        Live, ranked, geo-tagged demand signals — powered by the DemandRadar intelligence layer.
+        Deterministic demo scores over sample data and reports saved in this browser.
       </p>
 
       {/* KPI tiles */}
@@ -59,18 +59,18 @@ function Dashboard() {
           icon={Activity}
           label="Total demand signals"
           value={dashboardViewModel.totalSignals.toString()}
-          hint="across pilot zones"
+          hint="sample + browser-local"
         />
         <Kpi
           icon={TrendingUp}
           label="Avg signal strength"
           value={`${dashboardViewModel.averageSignalStrength}`}
-          hint="0–100"
+          hint="0-100"
         />
         <Kpi
           icon={Layers}
           label="Top unmet category"
-          value={dashboardViewModel.topCategory ? dashboardViewModel.topCategory.label : "—"}
+          value={dashboardViewModel.topCategory ? dashboardViewModel.topCategory.label : "-"}
           hint={
             dashboardViewModel.topCategory ? `${dashboardViewModel.topCategory.count} signals` : ""
           }
@@ -79,7 +79,7 @@ function Dashboard() {
         <Kpi
           icon={MapPin}
           label="Hotspot area"
-          value={dashboardViewModel.hotspotArea?.area ?? "—"}
+          value={dashboardViewModel.hotspotArea?.area ?? "-"}
           hint={
             dashboardViewModel.hotspotArea ? `${dashboardViewModel.hotspotArea.count} signals` : ""
           }
@@ -91,7 +91,7 @@ function Dashboard() {
         <div className="rounded-2xl border border-border bg-glass p-5 glass">
           <div className="mb-3 flex items-center justify-between">
             <h3 className="font-display text-sm font-semibold uppercase tracking-widest">
-              Demand matrix · category × area
+              Demand matrix / category by area
             </h3>
             <span className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
               heat = volume
@@ -265,7 +265,7 @@ function DemandMatrix({ matrix }: { matrix: DashboardViewModel["demandMatrix"] }
                         fontWeight: cell.count ? 600 : 400,
                       }}
                     >
-                      {cell.count || "·"}
+                      {cell.count || "/"}
                     </div>
                   </td>
                 );

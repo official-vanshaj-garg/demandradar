@@ -24,7 +24,7 @@ export function DemandCard({ viewModel, onOpen, onUpvote, upvoted }: Props) {
           <div className="flex items-center gap-2 text-[10px] font-mono uppercase tracking-[0.18em] text-muted-foreground">
             <span className="h-1.5 w-1.5 rounded-full" style={{ background: meta.color }} />
             <span style={{ color: meta.color }}>{meta.label}</span>
-            <span>·</span>
+            <span>/</span>
             <span>{viewModel.subCategory}</span>
           </div>
           <h3 className="mt-1.5 text-base font-semibold leading-snug text-foreground">
@@ -46,27 +46,36 @@ export function DemandCard({ viewModel, onOpen, onUpvote, upvoted }: Props) {
         <span className="inline-flex items-center gap-1 rounded-md bg-muted/50 px-2 py-0.5 text-[11px] text-muted-foreground">
           <MapPin className="h-3 w-3" /> {viewModel.locationText}
         </span>
+        <span className="inline-flex rounded-md bg-muted/50 px-2 py-0.5 text-[11px] text-muted-foreground">
+          {viewModel.originLabel}
+        </span>
       </div>
 
       <div className="mt-4">
         <ConfidenceBar value={viewModel.confidenceScore} />
       </div>
 
-      <div className="mt-4 flex items-center justify-between border-t border-border/60 pt-3">
-        <button
-          onClick={() => onUpvote?.(viewModel.id)}
-          className={
-            "inline-flex items-center gap-1.5 rounded-md border px-2.5 py-1 text-xs transition " +
-            (upvoted
-              ? "border-primary/50 bg-primary/15 text-primary"
-              : "border-border text-muted-foreground hover:border-primary/40 hover:text-primary")
-          }
-        >
-          <ThumbsUp className="h-3.5 w-3.5" /> {viewModel.upvotes}
-        </button>
+      <div className="mt-4 flex flex-wrap items-center gap-2 border-t border-border/60 pt-3">
+        <div>
+          <button
+            type="button"
+            onClick={() => onUpvote?.(viewModel.id)}
+            aria-pressed={Boolean(upvoted)}
+            aria-label={`${upvoted ? "Remove" : "Add"} browser-local support for ${viewModel.title}`}
+            className={
+              "inline-flex items-center gap-1.5 rounded-md border px-2.5 py-1 text-xs transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 " +
+              (upvoted
+                ? "border-primary/50 bg-primary/15 text-primary"
+                : "border-border text-muted-foreground hover:border-primary/40 hover:text-primary")
+            }
+          >
+            <ThumbsUp className="h-3.5 w-3.5" /> I need this too ({viewModel.upvotes})
+          </button>
+          <div className="mt-1 text-[10px] text-muted-foreground">Browser-local demo support</div>
+        </div>
         <button
           onClick={() => onOpen?.()}
-          className="inline-flex items-center gap-1 text-xs font-medium text-primary hover:underline"
+          className="ml-auto inline-flex items-center gap-1 text-xs font-medium text-primary hover:underline"
         >
           Open Demand Card <ArrowUpRight className="h-3.5 w-3.5" />
         </button>
