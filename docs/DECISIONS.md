@@ -115,3 +115,9 @@ Persisted reports and upvote state are treated as untrusted data and validated b
 The current prototype presents `seed-*` records as sample data and all other current reports as saved in the active browser. Sample records start with zero support and a neutral workflow state; visible support is labeled "I need this too" and remains browser-local.
 
 The current classifier and clustering are deterministic. No production AI model, shared public engagement, or live public pilot is claimed. A DemandReport provenance migration is not needed while canonical seed IDs remain the presentation boundary.
+
+## Decision 016 - Public demo deployment stays SSR-first and noindex
+
+Cloudflare Workers is the public-demo host while TanStack Start SSR remains the application runtime. Security and noindex headers are applied at the Worker response boundary.
+
+The public build explicitly uses the SVG renderer. `VITE_*` values are browser-public, generated `dist/server/.dev.vars` is local preview output that must not be manually published, and no database, auth, production AI, or map-provider work is added in this layer.
